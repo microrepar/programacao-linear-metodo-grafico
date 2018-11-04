@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Resultado{% endblock %}
+
+{% block cabecalho %}
+<nav class="navbar fixed-top navbar-dark bg-primary">
+    <a class="navbar-brand" href="{{ url_for('home') }}">Home</a>
+</nav>
+{% endblock %}
+
+{% block conteudo %}
+<div class="container-fluid my-5 pt-2">
+    <h1 class="my-2">SOLUÇÃO PELO MÉTODO GRÁFICO</h1>
+
+    {% set fObj = resultado['funcao_objetivo'] %}
+    {% set listaFuncoesObj = resultado['lista_func_vertices_validos'] %}
+
+    <div class="row text-nowrap ">
+        <table class="table table-hover table-striped ">
+            <thead class="thead-inverse thead-dark ">
+                <tr>
+                    <th>FUNÇÃO OBJETIVO</th>
+                    <th>{{ fObj.rotulos[0].upper() }} (y)</th>
+                    <th>{{ fObj.rotulos[1].upper() }} (x)</th>
+                    <th>TOTAL</th>
+                    <th>
+                        {% if fObj.objetivo == 'max' %}
+                        MAXIMIZAÇÃO
+                        {% else %}
+                        MINIMIZAÇÃO
+                        {% endif %}
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for funcao in listaFuncoesObj %}
+                <tr>
+                    <th scope="row ">{{ funcao|e }}</th>
+                    <td class="text-center">{{ funcao.solucao[0] }}</td>
+                    <td class="text-center">{{ funcao.solucao[1] }}</td>
+                    <td>{{ funcao.valor }}</td>
+                    <td
+                        {% if funcao.solucao == fObj.solucao %}
+                            class="bg-success text-center">TRUE
+                        {% else %}
+                            class="bg-danger text-center">FALSE
+                        {% endif %}                        
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- Don't forget the "|safe"! -->
+<div id="chart">
+    <embed type="image/svg+xml" src={{ chart|safe }} />
+</div>
+{% endblock %}

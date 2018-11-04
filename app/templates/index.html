@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Programação Linear{% endblock %}
+
+
+
+
+{% block cabecalho %}
+
+<div class="jumbotron py-1 mt-2">
+    <h1 class="display-5 text-center">
+        <a href="{{ url_for('home') }}">
+            Programação Linear
+        </a>
+    </h1>
+    <p class="lead">
+        Serviço de Resolução de Programação Linear pelo método gráfico
+    </p>
+    <hr class="my-2">
+    <p>Mais Informações</p>
+    <p class="lead">
+        <a class="btn btn-primary btn-lg" href="{{ url_for('saber_mais') }}" role="button">Método Gráfico</a>
+    </p>
+</div>
+{% endblock %}
+
+{% block conteudo %}
+<h2 class="display-5">MÉTODO GRÁFICO</h2>
+<form action="{{ url_for('home') }}" method="POST">
+    <div class="form-group">
+        <label for="id_qtde_restricoes">Insirá a quantidade total de restrições do problema a ser resolvido:</label>
+        <input autofocus type="text" class="form-control" name="qtde_restricoes" id="id_qtde_restricoes" aria-describedby="helpId"
+            placeholder="Insirá aqui a quantidade de restrições">
+        <small id="helpId" class="form-text text-muted">ATENÇÃO! Deverá ser considerado as restriçoes de positividade; x, y >= 0, isto é, além das restrições identificadas, deverá contar + 2</small>
+    </div>
+    <button type="submit" class="btn btn-primary" name="acao" value="iniciar">Iniciar <i class="fas fa-play fa-1x fa-fw"></i></i></button>
+</form>
+
+{% endblock %}

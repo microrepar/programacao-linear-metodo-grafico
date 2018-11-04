@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>{% block titulo %}{% endblock %}
+    </title>
+    <style>
+        body {
+            background-color: #e0e0e0;
+            font-size: 1.2rem;
+        }
+
+        .jumbotron h1 a {
+            text-decoration: none;
+            color: black;
+        }
+
+        .jumbotron h1 a:hover {
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        {% block cabecalho %}{% endblock %}
+
+
+        <div class="container conteudo pt-3"> 
+            
+            {% block conteudo %}{% endblock %}
+
+            {% with messages = get_flashed_messages() %}
+
+            {% if 'vindo' in messages[0] or 'sucesso' in messages[0] %}
+            {% for message in messages %}
+            {% include "alerta_success.html" %}
+            {% endfor %}
+
+            {% elif messages %}
+            {% for message in messages %}
+            {% include "alerta_danger.html" %}
+            {% endfor %}
+            {% else %}
+
+            {% endif %}
+            {% endwith %}
+
+        </div>
+    </div>
+    <footer class="mb-5"></footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.13.0/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</body>
+
+</html>
