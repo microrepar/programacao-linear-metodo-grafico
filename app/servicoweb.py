@@ -43,24 +43,26 @@ def resolver_metodo_grafico(request):
 
     funcaoObjetivo.setRotuloVar1(request.form['rotulo_var1'])
     funcaoObjetivo.setRotuloVar2(request.form['rotulo_var2'])
-    
+
     solucaoOtima = encontrar_solucao(funcaoObjetivo, coordenadas_validas)
 
-    listaFuncoesComVerticesValidos = lista_funcoes_obj_com_vertices_validos(funcaoObjetivo, coordenadas_validas)
-    resultado.setdefault('lista_func_vertices_validos', listaFuncoesComVerticesValidos)
+    listaFuncoesComVerticesValidos = lista_funcoes_obj_com_vertices_validos(
+        funcaoObjetivo, coordenadas_validas)
+    resultado.setdefault('lista_func_vertices_validos',
+                         listaFuncoesComVerticesValidos)
 
     funcaoObjetivo.setSolucao(solucaoOtima)
 
-    resultado.setdefault('funcao_objetivo', funcaoObjetivo)    
+    resultado.setdefault('funcao_objetivo', funcaoObjetivo)
     # print(funcaoObjetivo, funcaoObjetivo.objetivo)
     # print('SOLUCAO OTIMA ->>', funcaoObjetivo)
     # print('SOLUCAO OTIMA ->>', funcaoObjetivo.getPontosDaReta())
-    
+
     return resultado
 
 
 def gerar_grafico(resultado):
-    problema_de = {'max':'MAXIMIZAÇÃO', 'min': 'MINIMIZAÇÃO'}
+    problema_de = {'max': 'MAXIMIZAÇÃO', 'min': 'MINIMIZAÇÃO'}
     fObjetivo = resultado.get('funcao_objetivo')
     restricoes = resultado.get('restricoes')
 
@@ -73,18 +75,25 @@ def gerar_grafico(resultado):
     xy_chart.add(f'{fObjetivo.objetivo.upper()}: {str(fObjetivo)}',
                  fObjetivo.getPontosDaReta(), stroke_style={'width': 5, 'dasharray': '3,6', 'linecap': 'round'})
 
-
-    xy_chart.add(f'SOLUÇÃO ÓTIMA: {fObjetivo.solucao}',  [{'value': fObjetivo.solucao, 'node': {'r': 6}, 'style': 'stroke: black; stroke-width: 10'},
-                                    {'value': fObjetivo.solucao,
-                                        'node': {'r': 0}}
-                                    ], stroke_style={'width': 2})
     for i, restricao in enumerate(restricoes):
         # print(restricao, '->', restricao.trono)
         xy_chart.add(f'R{i+1}: {str(restricao)}:', restricao.getPontosDaReta(),
                      stroke_style={'width': 2})
 
+    xy_chart.add(f'SOLUÇÃO ÓTIMA: {fObjetivo.solucao}',  [{'value': fObjetivo.solucao, 'node': {'r': 0}},
+                                                          {'value': fObjetivo.solucao, 'node': {'r': 6}, 'style': 'stroke: black; stroke-width: 5'}
+                                                          ], stroke_style={'width': 2})
+
     # xy_chart.add(None, [{'value': (0, 40), 'node': {'r': 0}, 'style': 'fill: red; stroke: black; stroke-width: 10'},
     #                         {'value': (0, 0), 'node': {'r': 0}}
     #                         ], stroke_style={'dasharray': '0', 'width': 2, 'linecap': 'round', 'linejoin': 'round', 'line': 'black'
     #                                          })
+
+    for vertice in resultado['pares_ord_validos']:
+        if fObjetivo.solucao == vertice:
+            continue
+        xy_chart.add(None, [{'value': vertice, 'node': {'r': 6}},
+                            {'value': vertice, 'node': {'r': 0}}
+                            ], stroke_style={'width': 2})
+
     return xy_chart.render_data_uri()
