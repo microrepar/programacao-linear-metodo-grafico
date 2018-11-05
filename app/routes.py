@@ -37,7 +37,7 @@ def form_calculadora(qtde_restricoes):
                 return render_template('resultado.html', resultado=resultado, chart=chart)
             except Exception as ex:
                 print(ex)
-                flash(f'Erro inesperado!!! {ex}')
+                flash(f'Por favor preencha apenas expressões validas conforme exemplos. ')
                 return redirect(url_for('home'))
 
     return render_template('formCalculadora.html', qtde_restricoes=qtde_restricoes)
