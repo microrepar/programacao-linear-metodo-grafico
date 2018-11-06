@@ -28,7 +28,12 @@
 </head>
 
 <body>
-    <div class="container">
+
+    <nav class="navbar fixed-top navbar-dark bg-primary">
+        <a class="navbar-brand" href="{{ url_for('home') }}">Home</a>
+    </nav>
+
+    <div class="container mt-5 pt-2">
         {% block cabecalho %}{% endblock %}
     </div>
     <div class="container conteudo pt-3">

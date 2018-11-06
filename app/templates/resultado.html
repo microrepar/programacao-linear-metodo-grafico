@@ -2,15 +2,9 @@
 
 {% block titulo %}Resultado{% endblock %}
 
-{% block cabecalho %}
-<nav class="navbar fixed-top navbar-dark bg-primary">
-    <a class="navbar-brand" href="{{ url_for('home') }}">Home</a>
-</nav>
-{% endblock %}
-
 {% block conteudo %}
 
-<h1 class="mt-5 pt-5 display-5">SOLUÇÃO:</h1>
+<h1 class="my-3 display-5">SOLUÇÃO:</h1>
 
 {% set fObj = resultado['funcao_objetivo'] %}
 {% set listaFuncoesObj = resultado['lista_func_vertices_validos'] %}
@@ -58,5 +52,9 @@
 <!-- Don't forget the "|safe"! -->
 <div id="chart">
     <embed type="image/svg+xml" src={{ chart|safe }} />
+</div>
+<!-- Don't forget the "|safe"! -->
+<div class="my-5" id="chart1">
+    <embed type="image/svg+xml" src={{ chart1|safe }} />
 </div>
 {% endblock %}

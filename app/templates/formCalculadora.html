@@ -10,14 +10,18 @@
 
 
 {% block conteudo %}
-<h1 class="mt-5">MÉTODO GRÁFICO</h1>
+<div class="row justify-content-center">
+    <div class="col-sx-3 ">
+        <h1 class="mt-3 h2 ">MÉTODO GRÁFICO</h1>
+    </div>
+</div>
 <form action="" method="post">
     <div class="row">
         <div class="col-sm-6">
             <div class="form-group">
                 <label for="funcao_objetivo">Função Objetivo</label>
-                <input autofocus type="text" class="form-control" name="funcao_objetivo" id="funcao_objetivo" aria-describedby="helpId"
-                    placeholder="Insirá a função objetivo: 40x+30y=0">
+                <input autofocus type="text" class="form-control" name="funcao_objetivo" id="funcao_objetivo"
+                    aria-describedby="helpId" placeholder="Insirá a função objetivo: 40x+30y=0">
                 <small id="helpId" class="form-text text-muted">A Função Objetivo deverá conter zero no
                     resultado da expressão</small>
             </div>
@@ -35,31 +39,44 @@
     <div class="row">
         <div class="col-sm-6">
             <div class="form-group">
-              <label for="id_rotulo_var1">Rótulo da váriavel (x)</label>
-              <input type="text" class="form-control" name="rotulo_var1" id="id_rotulo_var1" aria-describedby="helpId" placeholder="Insira aqui um rótulo para variável de decisão (x)">
-              <small id="helpId" class="form-text text-muted">Rótulo da variável (x)</small>
+                <label for="id_rotulo_var1">Rótulo da váriavel (x)</label>
+                <input type="text" class="form-control" name="rotulo_var1" id="id_rotulo_var1" aria-describedby="helpId"
+                    placeholder="Insira aqui um rótulo para variável de decisão (x)">
+                <small id="helpId" class="form-text text-muted">Rótulo da variável (x)</small>
             </div>
         </div>
         <div class="col-sm-6">
             <div class="form-group">
-              <label for="id_rotulo_var2">Rótulo da variável (y)</label>
-              <input type="text" class="form-control" name="rotulo_var2" id="id_rotulo_var2" aria-describedby="helpId" placeholder="Insira aqui um rótulo para a variável de decisão (y)">
-              <small id="helpId" class="form-text text-muted">Rótulo da variável (x)</small>
+                <label for="id_rotulo_var2">Rótulo da variável (y)</label>
+                <input type="text" class="form-control" name="rotulo_var2" id="id_rotulo_var2" aria-describedby="helpId"
+                    placeholder="Insira aqui um rótulo para a variável de decisão (y)">
+                <small id="helpId" class="form-text text-muted">Rótulo da variável (x)</small>
             </div>
         </div>
     </div>
     <div class="form-group">
-      <input hidden type="text"  name="qtde_restricoes" id="id_qtd_restricoes" value="{{ qtde_restricoes }}" >
+        <input hidden type="text" name="qtde_restricoes" id="id_qtd_restricoes" value="{{ qtde_restricoes }}">
     </div>
-    {% for i in range(qtde_restricoes) %}
-    <div class="form-group">
-        <label for="id_restricao{{ i + 1 }}">Restrição {{ i + 1 }}:</label>
-        <input type="text" class="form-control" name="restricao{{ i + 1 }}" id="id_restricao{{ i + 1 }}" aria-describedby="helpId"
-            placeholder="Exemplo: 3+1=0   ou    3x+1y=0     ou     0+1>=0     ou  1x+0y>=0">
-        <small id="helpId" class="form-text text-muted">ATENÇÃO! Variáveis em que o valor for igual a zero, o valor
-            zero deverá ser inserido na expressão</small>
+
+    <div class="container-fluid border border-secondary mb-3 pt-3">
+        <div class="row">
+            {% for i in range(qtde_restricoes) %}
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="id_restricao{{ i + 1 }}">Restrição {{ i + 1 }}:</label>
+                    <input type="text" class="form-control" name="restricao{{ i + 1 }}" id="id_restricao{{ i + 1 }}"
+                        aria-describedby="helpId" placeholder="Exemplo: 3+1=0   ou    3x+1y=0     ou     0+1>=0     ou  1x+0y>=0">
+                </div>
+            </div>
+            {% endfor %}
+            <div class="col-sm-12">
+                <small id="helpId" class="form-text text-muted mb-3">
+                    ATENÇÃO! Variáveis em que o valor for igual a zero, o valor zero deverá ser inserido na
+                    expressão
+                </small>
+            </div>
+        </div>
     </div>
-    {% endfor %}
 
     <button type="submit" class="btn btn-primary" name="acao" value="resolver">Resolver</button>
 </form>

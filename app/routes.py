@@ -34,7 +34,8 @@ def form_calculadora(qtde_restricoes):
                     flash(resultado)
                     return redirect(url_for('form_calculadora', qtde_restricoes=qtde_restricoes))
                 chart = plotter.gerar_graficoXY(resultado)
-                return render_template('resultado.html', resultado=resultado, chart=chart)
+                chart1 = plotter.gerar_grafico_line(resultado)
+                return render_template('resultado.html', resultado=resultado, chart=chart, chart1=chart1)
             except Exception as ex:
                 print(ex)
                 flash(f'Por favor preencha apenas expressões validas conforme exemplos. ')
