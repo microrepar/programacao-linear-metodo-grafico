@@ -28,25 +28,80 @@
 </head>
 
 <body>
+<<<<<<< HEAD
+||||||| merged common ancestors
+    <div class="container">
+        {% block cabecalho %}{% endblock %}
+=======
+    <div class="container">
+        {% block cabecalho %}{% endblock %}
+    </div>
+>>>>>>> e31c6e8d784eea9dc98cd4e09849d0b81f5a6eee
 
+<<<<<<< HEAD
     <nav class="navbar fixed-top navbar-dark bg-primary">
         <a class="navbar-brand" href="{{ url_for('home') }}">Home</a>
     </nav>
+||||||| merged common ancestors
+=======
+    <div class="container conteudo pt-3">
+>>>>>>> e31c6e8d784eea9dc98cd4e09849d0b81f5a6eee
 
+<<<<<<< HEAD
     <div class="container mt-5 pt-2">
         {% block cabecalho %}{% endblock %}
     </div>
     <div class="container conteudo pt-3">
-
+||||||| merged common ancestors
+        <div class="container conteudo pt-3"> 
+            
+            {% block conteudo %}{% endblock %}
+=======
         {% block conteudo %}{% endblock %}
+>>>>>>> e31c6e8d784eea9dc98cd4e09849d0b81f5a6eee
 
+<<<<<<< HEAD
+        {% block conteudo %}{% endblock %}
+||||||| merged common ancestors
+            {% with messages = get_flashed_messages() %}
+=======
         {% with messages = get_flashed_messages() %}
+>>>>>>> e31c6e8d784eea9dc98cd4e09849d0b81f5a6eee
 
+<<<<<<< HEAD
+        {% with messages = get_flashed_messages() %}
+||||||| merged common ancestors
+            {% if 'vindo' in messages[0] or 'sucesso' in messages[0] %}
+            {% for message in messages %}
+            {% include "alerta_success.html" %}
+            {% endfor %}
+=======
         {% if 'vindo' in messages[0] or 'sucesso' in messages[0] %}
         {% for message in messages %}
         {% include "alerta_success.html" %}
         {% endfor %}
+>>>>>>> e31c6e8d784eea9dc98cd4e09849d0b81f5a6eee
 
+<<<<<<< HEAD
+        {% if 'vindo' in messages[0] or 'sucesso' in messages[0] %}
+        {% for message in messages %}
+        {% include "alerta_success.html" %}
+        {% endfor %}
+||||||| merged common ancestors
+            {% elif messages %}
+            {% for message in messages %}
+            {% include "alerta_danger.html" %}
+            {% endfor %}
+            {% else %}
+=======
+        {% elif messages %}
+        {% for message in messages %}
+        {% include "alerta_danger.html" %}
+        {% endfor %}
+        {% else %}
+>>>>>>> e31c6e8d784eea9dc98cd4e09849d0b81f5a6eee
+
+<<<<<<< HEAD
         {% elif messages %}
         {% for message in messages %}
         {% include "alerta_danger.html" %}
@@ -55,13 +110,20 @@
 
         {% endif %}
         {% endwith %}
+||||||| merged common ancestors
+            {% endif %}
+            {% endwith %}
+=======
+        {% endif %}
+        {% endwith %}
+>>>>>>> e31c6e8d784eea9dc98cd4e09849d0b81f5a6eee
 
     </div>
 
     <footer class="my-5 container">
         <hr class="my-1">
         <p class="text-muted text-center ">
-            <small>Copyright © 2018 Fatec Mogi das Cruzes - by MCSilva</small>
+            <small>Copyright © 2018 Fatec MC - by MCSilva</small>
         </p>
     </footer>
 
