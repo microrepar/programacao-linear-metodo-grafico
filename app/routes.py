@@ -1,7 +1,7 @@
 """[summary]
 """
 from flask import render_template, request, redirect, url_for, flash
-from app import app, servicoweb
+from app import app, servicoweb, plotter
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -33,7 +33,7 @@ def form_calculadora(qtde_restricoes):
                 if type(resultado) is type(''):
                     flash(resultado)
                     return redirect(url_for('form_calculadora', qtde_restricoes=qtde_restricoes))
-                chart = servicoweb.gerar_grafico(resultado)
+                chart = plotter.gerar_graficoXY(resultado)
                 return render_template('resultado.html', resultado=resultado, chart=chart)
             except Exception as ex:
                 print(ex)

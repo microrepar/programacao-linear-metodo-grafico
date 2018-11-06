@@ -9,49 +9,50 @@
 {% endblock %}
 
 {% block conteudo %}
-<div class="container-fluid my-5 pt-2">
-    <h1 class="my-2">SOLUÇÃO PELO MÉTODO GRÁFICO</h1>
 
-    {% set fObj = resultado['funcao_objetivo'] %}
-    {% set listaFuncoesObj = resultado['lista_func_vertices_validos'] %}
+<h1 class="mt-5 pt-5 display-5">SOLUÇÃO:</h1>
 
-    <div class="row text-nowrap ">
-        <table class="table table-hover table-striped ">
-            <thead class="thead-inverse thead-dark ">
-                <tr>
-                    <th>FUNÇÃO OBJETIVO</th>
-                    <th>{{ fObj.rotulos[0].upper() }} (y)</th>
-                    <th>{{ fObj.rotulos[1].upper() }} (x)</th>
-                    <th>TOTAL</th>
-                    <th>
-                        {% if fObj.objetivo == 'max' %}
-                        MAXIMIZAÇÃO
-                        {% else %}
-                        MINIMIZAÇÃO
-                        {% endif %}
+{% set fObj = resultado['funcao_objetivo'] %}
+{% set listaFuncoesObj = resultado['lista_func_vertices_validos'] %}
 
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for funcao in listaFuncoesObj %}
-                <tr>
-                    <th scope="row ">{{ funcao|e }}</th>
-                    <td class="text-center">{{ funcao.solucao[0] }}</td>
-                    <td class="text-center">{{ funcao.solucao[1] }}</td>
-                    <td>{{ funcao.valor }}</td>
-                    <td
-                        {% if funcao.solucao == fObj.solucao %}
-                            class="bg-success text-center text-white">TRUE
-                        {% else %}
+<div class="row mb-5">
+    <div class="col">
+        <div class="text-nowrap table-responsive"> 
+            <table class="table table-hover table-striped ">
+                <thead class="thead-inverse thead-dark ">
+                    <tr>
+                        <th>FUNÇÃO OBJETIVO</th>
+                        <th>{{ fObj.rotulos[0].upper() }} (x)</th>
+                        <th>{{ fObj.rotulos[1].upper() }} (y)</th>
+                        <th>TOTAL</th>
+                        <th>
+                            {% if fObj.objetivo == 'max' %}
+                            MAXIMIZAÇÃO
+                            {% else %}
+                            MINIMIZAÇÃO
+                            {% endif %}
+
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for funcao in listaFuncoesObj %}
+                    <tr>
+                        <th scope="row ">{{ funcao|e }}</th>
+                        <td class="text-center">{{ funcao.solucao[0] }}</td>
+                        <td class="text-center">{{ funcao.solucao[1] }}</td>
+                        <td>{{ funcao.valor }}</td>
+                        <td {% if funcao.solucao==fObj.solucao %} class="bg-success text-center text-white">TRUE
+                            {% else %}
                             class="bg-danger text-center text-white">FALSE
-                        {% endif %}                        
-                    </td>
-                </tr>
-                {% endfor %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <!-- Don't forget the "|safe"! -->

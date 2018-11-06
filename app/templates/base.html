@@ -30,30 +30,29 @@
 <body>
     <div class="container">
         {% block cabecalho %}{% endblock %}
-
-
-        <div class="container conteudo pt-3"> 
-            
-            {% block conteudo %}{% endblock %}
-
-            {% with messages = get_flashed_messages() %}
-
-            {% if 'vindo' in messages[0] or 'sucesso' in messages[0] %}
-            {% for message in messages %}
-            {% include "alerta_success.html" %}
-            {% endfor %}
-
-            {% elif messages %}
-            {% for message in messages %}
-            {% include "alerta_danger.html" %}
-            {% endfor %}
-            {% else %}
-
-            {% endif %}
-            {% endwith %}
-
-        </div>
     </div>
+    <div class="container conteudo pt-3">
+
+        {% block conteudo %}{% endblock %}
+
+        {% with messages = get_flashed_messages() %}
+
+        {% if 'vindo' in messages[0] or 'sucesso' in messages[0] %}
+        {% for message in messages %}
+        {% include "alerta_success.html" %}
+        {% endfor %}
+
+        {% elif messages %}
+        {% for message in messages %}
+        {% include "alerta_danger.html" %}
+        {% endfor %}
+        {% else %}
+
+        {% endif %}
+        {% endwith %}
+
+    </div>
+
     <footer class="my-5 container">
         <hr class="my-1">
         <p class="text-muted text-center ">
