@@ -1,4 +1,5 @@
 import pygal
+import copy
 
 
 def gerar_graficoXY(resultado):
@@ -10,7 +11,7 @@ def gerar_graficoXY(resultado):
                         dynamic_print_values=True, print_values_position='top',
                         legend_at_bottom_columns=2, interpolate='cubic')
 
-    xy_chart.title = f'PROBLEMA DE {problema_de[fObjetivo.objetivo]}\n Solução Ótima: {fObjetivo.rotulos[0]}:{fObjetivo.solucao[0]} e {fObjetivo.rotulos[1]}:{fObjetivo.solucao[1]} '
+    xy_chart.title = f'PROBLEMA DE {problema_de[fObjetivo.objetivo]}\n Solução Ótima-> {fObjetivo.rotulos[0]}:{fObjetivo.solucao[0]:.3f} | {fObjetivo.rotulos[1]}:{fObjetivo.solucao[1]:.3f} '
 
     xy_chart.add(f'{fObjetivo.objetivo.upper()}: {str(fObjetivo)}',
                  fObjetivo.getPontosDaReta(), stroke_style={'width': 5, 'dasharray': '3,6', 'linecap': 'round'})
@@ -51,10 +52,24 @@ def gerar_grafico_line(resultado):
     chart = pygal.XY(xrange=(0, int(fObjetivo.trono[0])),  show_y_guides=True, legend_at_bottom=True,
                      dynamic_print_values=True, print_values_position='top',
                      legend_at_bottom_columns=2)
-    chart.title = f'PROBLEMA DE {problema_de[fObjetivo.objetivo]}\n Solução Ótima: {fObjetivo.rotulos[0]}:{fObjetivo.solucao[0]} e {fObjetivo.rotulos[1]}:{fObjetivo.solucao[1]}'
-
-    chart.add('line', [(0, 0), (0, 24), (8, 24), (16, 8), (16, 0), (0, 0)],  fill=True)
-    chart.add('Funcão Objetivo Max', fObjetivo.getPontosDaReta())
-    chart.add('Solução Ótima', [fObjetivo.solucao], dots_size=6)
+    chart.title = f'PROBLEMA DE {problema_de[fObjetivo.objetivo]}\n Solução Ótima-> {fObjetivo.rotulos[0]}:{fObjetivo.solucao[0]:.3f} | {fObjetivo.rotulos[1]}:{fObjetivo.solucao[1]:.3f}'
+    # [(0, 0), (0, 24), (8, 24), (16, 8), (16, 0), (0, 0)]
+    chart.add('REGIÃO VIÁVEL', ordenar_vertices(vertices) ,  fill=True)
+    chart.add('FUNÇÃO OBJETIVA MAX.', fObjetivo.getPontosDaReta())
+    chart.add('SOLUÇÃO ÓTIMA', [fObjetivo.solucao], dots_size=6)
     
     return chart.render_data_uri()
+
+
+def ordenar_vertices(vertices):
+    vertices_sorted = sorted(copy.deepcopy(vertices))
+    for i in range(len(vertices_sorted) - 1):
+        if i < len(vertices_sorted)//2:
+            continue
+        if vertices_sorted[i][0] == vertices_sorted[i+1][0]:
+            if vertices_sorted[i][1] < vertices_sorted[i+1][1]:
+                vertices_sorted[i], vertices_sorted[i+1] = vertices_sorted[i+1], vertices_sorted[i]
+    if len(vertices_sorted) > 3:
+        vertices_sorted.append(vertices_sorted[0])
+    return vertices_sorted
+

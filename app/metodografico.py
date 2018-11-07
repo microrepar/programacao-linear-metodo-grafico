@@ -1,6 +1,9 @@
 """Módulo para resolver problemas de Programação linear com até 2 variáveis de decisão
 FATEC - MC - Autor: MCSilva - 03/11/2018 - Versão: 0.0.1
 """
+from decimal import *
+getcontext().prec = 2
+
 
 
 class Funcao(object):
@@ -8,6 +11,7 @@ class Funcao(object):
     """
     trono = [0]
     rotulos = ['','']
+    letras = ['x','y']
 
     def __init__(self, var1=0., oper1='+', var2=0., oper2='>=', valor=0., letras=['x', 'y'], **kwargs):
 
@@ -16,14 +20,15 @@ class Funcao(object):
         self.oper1 = oper1
         self.oper2 = oper2
         self.valor = valor
-        self.letras = letras
+        if letras[0] not in 'xX' and letras[1] not in 'yY':
+            self.letras[0], self.letras[1] = letras[0], letras[1]
 
 
     def __str__(self):
-        return (f'{self.var1}{self.letras[0]} {self.oper1} {self.var2}{self.letras[1]} {self.oper2} {self.valor}')
+        return (f'{self.var1}{self.letras[0]} {self.oper1} {self.var2}{self.letras[1]} {self.oper2} {self.valor:.2f}')
 
     def __repr__(self):
-        return (f'({self.var1}{self.letras[0]} {self.oper1} {self.var2}{self.letras[1]} {self.oper2} {self.valor})')
+        return (f'({self.var1}{self.letras[0]} {self.oper1} {self.var2}{self.letras[1]} {self.oper2} {self.valor:.2f})')
         
     def getPontosDaReta(self):
         pontos_da_reta = []
@@ -72,7 +77,8 @@ class FuncaoObjetivo(Funcao):
         self.solucao = solucao
         self.valor = calcular(self.oper1, solucao[0] * self.var1, solucao[1] * self.var2)
         try:
-            self.trono[0] = (self.valor / self.var1) if (self.valor / self.var1) > (self.valor / self.var2) else (self.valor / self.var2)
+            pre_trono = (self.valor / self.var1) if (self.valor / self.var1) > (self.valor / self.var2) else (self.valor / self.var2)
+            self.trono[0] = pre_trono if pre_trono > self.trono[0] else self.trono[0]
         except Exception as ex:
             print(f'O valor do resultado da função ainda não foi definido\n{ex}')
 
@@ -170,8 +176,9 @@ def metodo_cramer(restricoes):
             determinantey = (restricoes[i].var1 * restricoes[j].valor) - \
                 (restricoes[j].var1 * restricoes[i].valor)
             # print('det(Dy)-->',determinantey)
-            pontos.append((determinantex/determinante,
-                           determinantey/determinante))
+            detx, dety = determinantex / determinante, determinantey / determinante
+            # print('ROUND ->>',detx,dety)
+            pontos.append((detx, dety))
     return list(set([x for x in pontos]))
 
 
