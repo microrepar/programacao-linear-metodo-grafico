@@ -23,11 +23,16 @@
 
 {% block conteudo %}
 <h2 class="display-5">MÉTODO GRÁFICO</h2>
-<div class="row">
-    <div class="col-sm-6">
-        <form action="{{ url_for('home') }}" method="POST">
-            <div class="form-group text-nowrap">
+
+<form action="{{ url_for('home') }}" method="POST">
+    <div class="form-group">
+        <div class="row">
+            <div class="col-sm-8">
                 <label for="id_qtde_restricoes">Insirá a quantidade total de restrições do problema a ser resolvido:</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
                 <input autofocus type="text" class="form-control" name="qtde_restricoes" id="id_qtde_restricoes"
                     aria-describedby="helpId" placeholder="Insirá aqui a quantidade de restrições">
                 {#
@@ -36,9 +41,9 @@
                     x, y >= 0, isto é, além das restrições identificadas, deverá contar + 2</small>
                 #}
             </div>
-            <button type="submit" class="btn btn-primary mt-2" name="acao" value="iniciar">Iniciar <i class="fas fa-play fa-1x fa-fw"></i></i></button>
-        </form>
+        </div>
+        <button type="submit" class="btn btn-primary mt-2" name="acao" value="iniciar">Iniciar <i class="fas fa-play fa-1x fa-fw"></i></i></button>
     </div>
-</div>
+</form>
 
 {% endblock %}
