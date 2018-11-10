@@ -21,36 +21,45 @@
             <div class="form-group">
                 <label for="funcao_objetivo">Função Objetivo</label>
                 <input autofocus type="text" class="form-control" name="funcao_objetivo" id="funcao_objetivo"
-                    aria-describedby="helpId" placeholder="Insirá a função objetivo: 40x+30y=0">
-                <small id="helpId" class="form-text text-muted">A Função Objetivo deverá conter zero no
-                    resultado da expressão</small>
+                    aria-describedby="helpId" placeholder="Insirá a função objetivo: 40x+30y=L">
+                <small id="helpId" class="form-text text-muted">A Função Objetivo deverá ter as mesmas 
+                    variáveis declaradas nos rótulos abaixo</small>
             </div>
         </div>
         <div class="col-sm-6">
             <div class="form-group">
                 <label for="id_objetivo">Objetivo</label>
-                <select class="form-control" name="objetivo" id="id_objetivo">
+                <select class="form-control font-weight-bold text-danger" name="objetivo" id="id_objetivo">
                     <option value="max">Maximização</option>
                     <option value="min">Minimização</option>
                 </select>
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row ">
         <div class="col-sm-6">
             <div class="form-group">
-                <label for="id_rotulo_var1">Rótulo da váriavel (x)</label>
+                <label for="id_rotulo_var1">Rótulo da váriavel 
+                    (<span>
+                        <input type="text" class="text-center font-weight-bold" name="variavelx" id="id_variavelx" size="1" value="x" >
+                    </span>)
+
+                </label>
                 <input type="text" class="form-control" name="rotulo_var1" id="id_rotulo_var1" aria-describedby="helpId"
                     placeholder="Insira aqui um rótulo para variável de decisão (x)">
-                <small id="helpId" class="form-text text-muted">Rótulo da variável (x)</small>
+                <small id="helpId" class="form-text text-muted">Rótulo da variável</small>
             </div>
         </div>
         <div class="col-sm-6">
             <div class="form-group">
-                <label for="id_rotulo_var2">Rótulo da variável (y)</label>
+                <label for="id_rotulo_var2">Rótulo da variável 
+                    (<span >
+                        <input  type="text" class="text-center font-weight-bold" name="variavely" id="id_variavely" size="1" value="y">
+                    </span>)
+                </label>
                 <input type="text" class="form-control" name="rotulo_var2" id="id_rotulo_var2" aria-describedby="helpId"
                     placeholder="Insira aqui um rótulo para a variável de decisão (y)">
-                <small id="helpId" class="form-text text-muted">Rótulo da variável (x)</small>
+                <small id="helpId" class="form-text text-muted">Rótulo da variável</small>
             </div>
         </div>
     </div>
@@ -65,19 +74,19 @@
                 <div class="form-group">
                     <label for="id_restricao{{ i + 1 }}">Restrição {{ i + 1 }}:</label>
                     <input type="text" class="form-control" name="restricao{{ i + 1 }}" id="id_restricao{{ i + 1 }}"
-                        aria-describedby="helpId" placeholder="Exemplo: 3+1=0   ou    3x+1y=0     ou     0+1>=0     ou  1x+0y>=0">
+                        aria-describedby="helpId" placeholder="">
                 </div>
             </div>
             {% endfor %}
             <div class="col-sm-12">
                 <small id="helpId" class="form-text text-muted mb-3">
-                    ATENÇÃO! Variáveis em que o valor for igual a zero, o valor zero deverá ser inserido na
-                    expressão
+                    <span class="text-danger font-weight-bold">ATENÇÃO!</span> As Variáveis declaradas no rótulo deverão ser as mesmas, tanto na função objetivo quanto em todas as restrições.
                 </small>
             </div>
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary" name="acao" value="resolver">Resolver</button>
+    <button type="submit" class="btn btn-primary" name="acao" value="resolver">RESOLVER</button>
+    <button type="reset" class="btn btn-primary">LIMPAR</button>
 </form>
 {% endblock %}

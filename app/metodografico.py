@@ -1,10 +1,7 @@
 """Módulo para resolver problemas de Programação linear com até 2 variáveis de decisão
 FATEC - MC - Autor: MCSilva - 03/11/2018 - Versão: 0.0.1
 """
-from decimal import *
-getcontext().prec = 2
-
-
+from app import conversor
 
 class Funcao(object):
     """Classe Funcao - super classe das classes Restricao e FuncaoObjetivo
@@ -89,7 +86,7 @@ class FuncaoObjetivo(Funcao):
         return representa
 
 
-def set_expressao(expressao):
+def set_expressao(expressao, varx, vary):
     """Prepara a string contendo a expressão matematica para instacia de um
     do tipo da Classe Funcao
 
@@ -105,16 +102,20 @@ def set_expressao(expressao):
     """
     if not expressao:
         expressao ='0x+0y=0'
-    expressao = expressao.replace(' ', '')
-    expressao = expressao.replace('+', ' + ')
-    expressao = expressao.replace('-', ' - ')
-    if '<=' not in expressao and '>=' not in expressao:
-        expressao = expressao.replace('=', ' = ')
-    expressao = expressao.replace('>=', ' >= ')
-    expressao = expressao.replace('<=', ' <= ')
-    expressao = expressao.strip()
-    if expressao[0] != '-':
-        expressao = '+ ' + expressao
+    # TODO: limpar codígo comentado
+    # expressao = expressao.replace(' ', '')
+    # expressao = expressao.replace('+', ' + ')
+    # expressao = expressao.replace('-', ' - ')
+    # if '<=' not in expressao and '>=' not in expressao:
+    #     expressao = expressao.replace('=', ' = ')
+    # expressao = expressao.replace('>=', ' >= ')
+    # expressao = expressao.replace('<=', ' <= ')
+    # expressao = expressao.strip()
+    # if expressao[0] != '-':
+    #     expressao = '+ ' + expressao
+
+    
+    expressao = conversor.prepara_string_to_map(expressao, varx, vary)
 
     args = [(x, i) for x, i in zip(
         'oper0 var1 oper1 var2 oper2 valor'.split(), expressao.split())]
@@ -271,13 +272,13 @@ def encontrar_solucao(funcao, coordenadas_validas):
     return coordenadas_validas[trono.index(objetivo.get(funcao.objetivo)(trono))]
 
 
-def lista_funcoes_obj_com_vertices_validos(funcaoObjetivo, lista_coordenadas):
+def lista_funcoes_obj_com_vertices_validos(funcaoObjetivo, lista_coordenadas, varx, vary):
     lista_funcoes_objetivo = []
     expressao = str(funcaoObjetivo)
     objetivo = funcaoObjetivo.objetivo
 
     for vertice in lista_coordenadas:
-        kwargs = set_expressao(expressao)
+        kwargs = set_expressao(expressao, varx, vary)
         kwargs.setdefault('objetivo', objetivo)
 
         fObjetivo = FuncaoObjetivo(**kwargs)
@@ -290,33 +291,33 @@ def lista_funcoes_obj_com_vertices_validos(funcaoObjetivo, lista_coordenadas):
 
 
 def main():
-    restricoes = []
-    expressao = ''
-    try:
-        for _ in range(5):
-            expressao = input('Entre com as restrições:')
-            kwargs = set_expressao(expressao)
-            restricoes.append(Restricao(**kwargs))
-    except Exception as ex:
-        print(ex, f'A expressão->> "{expressao}" está incorreta!')
+    # restricoes = []
+    # expressao = ''
+    # try:
+    #     for _ in range(5):
+    #         expressao = input('Entre com as restrições:')
+    #         kwargs = set_expressao(expressao, varx='x', vary='y')
+    #         restricoes.append(Restricao(**kwargs))
+    # except Exception as ex:
+    #     print(ex, f'A expressão->> "{expressao}" está incorreta!')
 
-    lista_coordenadas = metodo_cramer(restricoes)
-    # print(lista_coordenadas)
+    # lista_coordenadas = metodo_cramer(restricoes)
+    # # print(lista_coordenadas)
 
-    coordenadas_validas = get_coordenadas_validas(
-        lista_coordenadas[:], restricoes[:])
-    # print(coordenadas_validas)
+    # coordenadas_validas = get_coordenadas_validas(
+    #     lista_coordenadas[:], restricoes[:])
+    # # print(coordenadas_validas)
 
-    funcao = input('Insira a função objetivo:')
-    kwargs = set_expressao(funcao)
-    funcaoObjetivo = FuncaoObjetivo(objetivo='max', **kwargs)
-    # print(funcaoObjetivo, funcaoObjetivo.objetivo)
+    # funcao = input('Insira a função objetivo:')
+    # kwargs = set_expressao(funcao, varx=varx, vary=vary)
+    # funcaoObjetivo = FuncaoObjetivo(objetivo='max', **kwargs)
+    # # print(funcaoObjetivo, funcaoObjetivo.objetivo)
 
-    solucaoOtima = encontrar_solucao(funcaoObjetivo, coordenadas_validas)
+    # solucaoOtima = encontrar_solucao(funcaoObjetivo, coordenadas_validas)
 
-    funcaoObjetivo.setSolucao(solucaoOtima)
-    # print('SOLUCAO OTIMA ->>', funcaoObjetivo.__repr__())
-
+    # funcaoObjetivo.setSolucao(solucaoOtima)
+    # # print('SOLUCAO OTIMA ->>', funcaoObjetivo.__repr__())
+    pass
 
 if __name__ == '__main__':
     main()

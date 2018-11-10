@@ -3,18 +3,22 @@
 from app.metodografico import *
 
 
+
 def resolver_metodo_grafico(request):
     restricoes = []
     expressao = ''
     resultado = dict()
     # print('RESULTADO QTDE ->>', request.form['qtde_restricoes'])
     qtde_restricoes = int(request.form['qtde_restricoes'])
+    varx = request.form['variavelx']
+    vary = request.form['variavely']
     try:
         count = 0
         for i in range(qtde_restricoes):
             expressao = request.form[f'restricao{i + 1}']
             if expressao:
-                kwargs = set_expressao(expressao)
+                kwargs = set_expressao(expressao, varx, vary)
+                # print("KWARGS->>", kwargs)
                 restricoes.append(Restricao(**kwargs))
                 count += 1
         if count < 2:
@@ -34,7 +38,7 @@ def resolver_metodo_grafico(request):
 
     exprFuncao = request.form['funcao_objetivo']
     # print('F.O. ->>', funcao)
-    kwargs = set_expressao(exprFuncao)
+    kwargs = set_expressao(exprFuncao, varx, vary)
     kwargs.setdefault('objetivo', request.form['objetivo'])
     # print('OBJETIVO ->>', kwargs.get('objetivo'))
 
@@ -45,10 +49,8 @@ def resolver_metodo_grafico(request):
 
     solucaoOtima = encontrar_solucao(funcaoObjetivo, coordenadas_validas)
 
-    listaFuncoesComVerticesValidos = lista_funcoes_obj_com_vertices_validos(
-        funcaoObjetivo, coordenadas_validas)
-    resultado.setdefault('lista_func_vertices_validos',
-                         listaFuncoesComVerticesValidos)
+    listaFuncoesComVerticesValidos = lista_funcoes_obj_com_vertices_validos(funcaoObjetivo, coordenadas_validas, varx, vary)
+    resultado.setdefault('lista_func_vertices_validos', listaFuncoesComVerticesValidos)
 
     funcaoObjetivo.setSolucao(solucaoOtima)
 

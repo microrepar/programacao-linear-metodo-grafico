@@ -9,8 +9,8 @@ def home():
     if request.method == 'POST':
         try:
             qtde_restricoes = int(request.form['qtde_restricoes'])
-            if not qtde_restricoes or qtde_restricoes < 2:
-                flash(f'Você deve inserir a quantidade de 2 ou mais restrições')
+            if not qtde_restricoes or qtde_restricoes < 2 or qtde_restricoes > 11:
+                flash(f'Você deve inserir a quantidade de 2 a 10 restrições')
                 return redirect(url_for('home'))
             else:
                 return redirect(url_for('form_calculadora', qtde_restricoes=qtde_restricoes))
@@ -23,13 +23,13 @@ def home():
 
 @app.route('/formCalculadora/<int:qtde_restricoes>/restricoes', methods=['GET', 'POST'])
 def form_calculadora(qtde_restricoes):
-    if qtde_restricoes < 2:
-        flash('Você deve inserir a quantidade de 2 ou mais restrições')
+    if qtde_restricoes < 2 or qtde_restricoes > 11:
+        flash('Você deve inserir a quantidade de 2 a 10 restrições')
         return redirect(url_for('home'))
     if request.method == 'POST':
         if request.form['acao'] == 'resolver':
             try:
-                resultado = servicoweb.resolver_metodo_grafico(request=request)
+                resultado = servicoweb.resolver_metodo_grafico(request)
                 if type(resultado) is type(''):
                     flash(resultado)
                     return redirect(url_for('form_calculadora', qtde_restricoes=qtde_restricoes))
