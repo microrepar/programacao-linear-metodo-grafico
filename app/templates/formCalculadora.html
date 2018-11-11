@@ -80,8 +80,16 @@
             {% endfor %}
             <div class="col-sm-12">
                 <small id="helpId" class="form-text text-muted mb-3">
-                    <span class="text-danger font-weight-bold">ATENÇÃO!</span> As Variáveis declaradas no rótulo deverão ser as mesmas, tanto na função objetivo quanto em todas as restrições.
+                    <span class="text-danger font-weight-bold">ATENÇÃO!</span> As variáveis declaradas no rótulo deverão ser as mesmas, tanto na função objetivo quanto em todas as restrições.
                 </small>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-check form-check-inline mb-3">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" name="restricao_positiva" id="id_restricao_positiva" value="ativo"
+                            checked> Incluir restrições de positividade; onde x, y >= 0
+                    </label>
+                </div>
             </div>
         </div>
     </div>
