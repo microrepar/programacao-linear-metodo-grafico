@@ -1,6 +1,20 @@
-
+"""Módulo para funções utilitárias
+FATEC - MC - Autor: MCSilva - 03/11/2018 - Versão: 0.0.1
+"""
 
 def prepara_string_to_map(expressao, varx='x', vary='y'):
+    """Normaliza a string para que seja mapeada para uma kwargs
+    
+    Arguments:
+        expressao {str} -- expressão matemática de uma função linear com duas variáveis
+    
+    Keyword Arguments:
+        varx {str} -- caracter utilizado para representar a variável x (default: {'x'})
+        vary {str} -- caracter utilizado para representar a variável y (default: {'y'})
+    
+    Returns:
+        normalizado {str} -- expressão normalizada pronta para o mapeamento em uma keyword args (kwargs)
+    """
     resultado = list()
     processada = expressao
 
@@ -37,12 +51,13 @@ def prepara_string_to_map(expressao, varx='x', vary='y'):
 
     if resultado[-1][-1] not in '0123456789':
         resultado[-1] = f'{0.0}'
-
-    return ' '.join(resultado)
+    normalizado = ' '.join(resultado)
+    return normalizado
 
 
 if __name__ == "__main__":
-
+    """Instrução de decisão para rodar o código abaixo quando o módulo for executado como script
+    """
     print(prepara_string_to_map('x+y<=L', 'x', 'y'))
     print(prepara_string_to_map('x+y=L', 'x', 'y'))
     print(prepara_string_to_map('10x+y<=L', 'x', 'y'))

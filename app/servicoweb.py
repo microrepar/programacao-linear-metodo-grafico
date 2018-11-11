@@ -1,4 +1,5 @@
 """[summary]
+FATEC - MC - Autor: MCSilva - 03/11/2018 - Versão: 0.0.1
 """
 from app.metodografico import *
 
@@ -43,10 +44,8 @@ def resolver_metodo_grafico(request):
     # print(coordenadas_validas)
 
     exprFuncao = request.form['funcao_objetivo']
-    # print('F.O. ->>', funcao)
     kwargs = set_expressao(exprFuncao, varx, vary)
     kwargs.setdefault('objetivo', request.form['objetivo'])
-    # print('OBJETIVO ->>', kwargs.get('objetivo'))
 
     funcaoObjetivo = FuncaoObjetivo(**kwargs)
 
@@ -64,10 +63,7 @@ def resolver_metodo_grafico(request):
 
     funcaoObjetivo.setSolucao(solucaoOtima)
 
-    resultado.setdefault('funcao_objetivo', funcaoObjetivo)
-    # print(funcaoObjetivo, funcaoObjetivo.objetivo)
-    # print('SOLUCAO OTIMA ->>', funcaoObjetivo)
-    # print('SOLUCAO OTIMA ->>', funcaoObjetivo.getPontosDaReta())
+    resultado.setdefault('funcao_objetivo', funcaoObjetivo)    
 
     return resultado
 

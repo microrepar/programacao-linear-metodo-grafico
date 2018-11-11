@@ -52,7 +52,7 @@ def gerar_grafico_line(resultado):
     chart = pygal.XY(xrange=(0, int(fObjetivo.trono[0])),  show_y_guides=True, legend_at_bottom=True,
                      dynamic_print_values=True, print_values_position='top',
                      legend_at_bottom_columns=2)
-    chart.title = f'{ordenar_vertices(vertices)}\nPROBLEMA DE {problema_de[fObjetivo.objetivo]}\n Solução Ótima-> {fObjetivo.rotulos[0]}({fObjetivo.letras[0]}):{fObjetivo.solucao[0]:.3f} | {fObjetivo.rotulos[1]}({fObjetivo.letras[1]}):{fObjetivo.solucao[1]:.3f}'
+    chart.title = f'PROBLEMA DE {problema_de[fObjetivo.objetivo]}\n Solução Ótima-> {fObjetivo.rotulos[0]}({fObjetivo.letras[0]}):{fObjetivo.solucao[0]:.3f} | {fObjetivo.rotulos[1]}({fObjetivo.letras[1]}):{fObjetivo.solucao[1]:.3f}'
     # [(0, 0), (0, 24), (8, 24), (16, 8), (16, 0), (0, 0)]
     chart.add('REGIÃO VIÁVEL', ordenar_vertices(vertices) ,  fill=True)
     chart.add('FUNÇÃO OBJETIVA MAX.', fObjetivo.getPontosDaReta())

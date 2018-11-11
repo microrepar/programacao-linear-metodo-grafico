@@ -1,11 +1,11 @@
 """Módulo para resolver problemas de Programação linear com até 2 variáveis de decisão
 FATEC - MC - Autor: MCSilva - 03/11/2018 - Versão: 0.0.1
 """
-from app import conversor
+from app import util
 
-mapa_inclinacao = {'--': 'decrescente', '-+': 'crescente',
-                   '++': 'decrescente', '+-': 'crescente',
-                   'FalseTrue': 'vertical', 'TrueFalse': 'horizontal'
+mapa_inclinacao = {'--': 'Decr.', '-+': 'Cresc.',
+                   '++': 'Decr.', '+-': 'Cresc.',
+                   'FalseTrue': 'Vert.', 'TrueFalse': 'Horiz.'
                    }
 
 
@@ -70,7 +70,6 @@ class Funcao(object):
 class Restricao(Funcao):
     """Define a classe para criação de restrições da PL
     """
-
     def __init__(self, oper0='+', var1=0., oper1='+', var2=0., oper2='>=', valor=0., letras=['x', 'y'], **kwargs):
         super().__init__(oper0, var1, oper1, var2, oper2, valor, letras, **kwargs)
 
@@ -78,7 +77,6 @@ class Restricao(Funcao):
 class FuncaoObjetivo(Funcao):
     """Define a classe a criação da função objeto da PL
     """
-
     def __init__(self, oper0='+', var1=0., oper1='+', var2=0., oper2='>=', valor=0., letras=['x', 'y'], **kwargs):
         super().__init__(oper0, var1, oper1, var2, oper2, valor, letras, **kwargs)
         self.objetivo = kwargs.get('objetivo')
@@ -100,8 +98,7 @@ class FuncaoObjetivo(Funcao):
 
 
 def set_expressao(expressao, varx, vary):
-    """Prepara a string contendo a expressão matematica para instacia de um
-    do tipo da Classe Funcao
+    """Prepara a string contendo a expressão matematica para instância de um do tipo da Classe Funcao
 
     Arguments:
         expressao {str} -- string com a formula das funções objetivo e restrições
@@ -113,32 +110,25 @@ def set_expressao(expressao, varx, vary):
     Returns:
         dict -- dicionário de dados contendo os parametros para instanciar um objeto Funcao
     """
+    # insere uma expressão nula para os campos do formulários que não forem preenchidos
     if expressao == '':
         expressao = '0x+0y=0'
+        
+    expressao = util.prepara_string_to_map(expressao, varx, vary)
 
-    # TODO: limpar codígo comentado
-    # expressao = expressao.replace(' ', '')
-    # expressao = expressao.replace('+', ' + ')
-    # expressao = expressao.replace('-', ' - ')
-    # if '<=' not in expressao and '>=' not in expressao:
-    #     expressao = expressao.replace('=', ' = ')
-    # expressao = expressao.replace('>=', ' >= ')
-    # expressao = expressao.replace('<=', ' <= ')
-    # expressao = expressao.strip()
-    # if expressao[0] != '-':
-    #     expressao = '+ ' + expressao
-
-    expressao = conversor.prepara_string_to_map(expressao, varx, vary)
-
-    args = [(x, i) for x, i in zip(
-        'oper0 var1 oper1 var2 oper2 valor'.split(), expressao.split())]
-    # print(args)
+    # cria uma lista de tuplas do tipo chave, valor
+    args = [(x, i) for x, i in zip('oper0 var1 oper1 var2 oper2 valor'.split(), expressao.split())]
+    
+    # passa a lista de tuplas para a dict função para converter a lista de tuplas em um dicionário
     kwargs = dict(args)
 
     letras = [kwargs.get('var1')[-1], kwargs.get('var2')[-1]]
+
+    # concatena os sinais nos valores das variáveis x e y
     kwargs['var1'] = (kwargs.get('oper0') + kwargs.get('var1'))
     kwargs['var2'] = (kwargs.get('oper1') + kwargs.get('var2'))
-    # print(kwargs)
+
+    # valida os sinais e operadores da expressão
     if kwargs.get('oper1') not in ['+', '-'] or \
             kwargs.get('oper2') not in ['<=', '>=', '=']:
         raise RuntimeError()
@@ -160,10 +150,10 @@ def set_expressao(expressao, varx, vary):
             kwargs['var2'] = float(kwargs.get('var2'))
 
         kwargs['valor'] = float(kwargs.get('valor')[:])
-        # print(kwargs)
 
         return kwargs
     except ValueError as error:
+        print('SET_EXPRESSAO->>',error)
         raise error
         
 
@@ -171,9 +161,9 @@ def metodo_cramer(restricoes):
     """Efetua calculo matricial pelo metodo de Cramer
 
     Arguments:
-        restricoes {list} -- Lista de objetos do tipo Restricao
+        restricoes {list{Restricao}} -- Lista de objetos do tipo Restricao
     Returns:
-        {list} -- lista de coordenadas (x, y) com base nas restrições impostas
+        {list{tuple}} -- lista de coordenadas (x, y) com base nas restrições impostas
     """
     pontos = list()
     for i in range(len(restricoes)):
@@ -182,21 +172,20 @@ def metodo_cramer(restricoes):
                 continue
             determinante = (restricoes[i].var1 * restricoes[j].var2) - \
                 (restricoes[j].var1 * restricoes[i].var2)
-            # print('det(D)-->',determinante)
             if determinante == 0:
                 continue
             determinantex = (restricoes[i].valor * restricoes[j].var2) - \
                 (restricoes[j].valor * restricoes[i].var2)
-            # print('det(Dx)-->',determinantex)
             determinantey = (restricoes[i].var1 * restricoes[j].valor) - \
                 (restricoes[j].var1 * restricoes[i].valor)
-            # print('det(Dy)-->',determinantey)
             x, y = determinantex / determinante, determinantey / determinante
             # print(restricoes[i])
             # print(restricoes[j])
             # print(f'PONTOS->>',x,y)
             pontos.append((x,y))
-    return list(set([x for x in pontos]))
+    # insere a lista de pontos em uma set para retirar as tuplas de coordenadas repetidas
+    resultado_cramer = list(set(pontos))
+    return resultado_cramer
 
 
 def get_coordenadas_validas(lista_coordenadas, restricoes):
@@ -225,38 +214,18 @@ def get_coordenadas_validas(lista_coordenadas, restricoes):
 
 def sub(num1, num2):
     """Efetua a operação de subtração
-
-    Arguments:
-        num1 {float} -- numero de ponto flutuante
-        num2 {float} -- numero de ponto flutuante
-
-    Returns:
-        retorna a subtração de dois números
     """
     return num1 - num2
 
 
 def soma(num1, num2):
     """Efetua a operação de soma
-
-    Arguments:
-        num1 {float} -- numero de ponto flutuante
-        num2 {float} -- numero de ponto flutuante
-
-    Returns:
-        retorna a soma de dois números
     """
     return num1 + num2
 
 
 def calcular(operador, *args):
     """Verifica qual operação de calculo com base no operador dos objetos do tipo Funcao
-
-    Arguments:
-        operador {str} -- simbolo do operador do calculo a ser realizado
-
-    Returns:
-        retorna o resultado do cálculo com base no operador enviado
     """
     operacao = {'+': soma, '-': sub}
     return operacao.get(operador)(*args)
@@ -282,22 +251,42 @@ def eh_maior_que(valor, restricao):
     return valor > restricao
 
 
-def eh_coordenada_valida(operador, valor, restricao):
+def eh_coordenada_valida(operador, valor, restricao_valor):
+    """Função para retorna a função que compara os valores conforme operador
+
+    Arguments:
+        operador {str} -- operadora para comparação
+        valor {float} -- valor a ser comparado
+        restricao_valor {float} -- valor da restrição para efetuar comparação
+    Returns:
+        bool -- retorna um valor boleano conforme resultado da comparação
+    """
     operacao = {'<=': eh_menor_igual, '=': eh_igual, '>=': eh_maior_igual,
                 '<': eh_menor_que, '>': eh_maior_que
                 }
-    return operacao.get(operador)(valor, restricao)
+    # Utiliza a função mapeada utilizando o operador como chave e executa a função
+    # enviando os valores a serem comparados
+    return operacao.get(operador)(valor, restricao_valor)
 
 
 def encontrar_solucao(funcao, coordenadas_validas):
-    trono = []
+    """Função encontra a solução ótima da lista de coordenadas válidas
+    
+    Arguments:
+        funcao {FuncaoObjetivo} -- objeto FuncaoObjetivo para validar solução ótima
+        coordenadas_validas {lis[tuple]} -- lista de tuplas com coordenadas válidas
+    
+    Returns:
+        solucao_otima {tuple} -- tupla com a coordenada da solução ótima
+    """
+    valores_solucao = []
     objetivo = {'max': max, 'min': min}
     if len(coordenadas_validas) == 0:
         return coordenadas_validas
     for x, y in coordenadas_validas:
-        trono.append(
-            [calcular(funcao.oper1, funcao.var1 * x, funcao.var2 * y)])
-    return coordenadas_validas[trono.index(objetivo.get(funcao.objetivo)(trono))]
+        valores_solucao.append([calcular(funcao.oper1, funcao.var1 * x, funcao.var2 * y)])
+    solucao_otima = coordenadas_validas[valores_solucao.index(objetivo.get(funcao.objetivo)(valores_solucao))]
+    return solucao_otima
 
 
 def lista_funcoes_obj_com_vertices_validos(funcaoObjetivo, lista_coordenadas, varx, vary):
