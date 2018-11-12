@@ -1,8 +1,10 @@
-"""Módulo de rotas para os recursos servidos
+"""Módulo de rotas para os recursos oferecidos
 FATEC - MC - Autor: MCSilva - 03/11/2018 - Versão: 0.0.1
 """
+
 from flask import render_template, request, redirect, url_for, flash
 from app import app, servicoweb, plotter
+
 
 @app.route('/')
 @app.route('/index', methods=['GET', 'POST'])
@@ -59,7 +61,7 @@ def form_calculadora(qtde_restricoes):
     return render_template('formCalculadora.html', qtde_restricoes=qtde_restricoes)
 
 
-@app.route('/saberMais')
+@app.route('/saibaMais')
 def saber_mais():
     """Função decorada capitura as requisições do tipo GET para o recurso /saberMais
 

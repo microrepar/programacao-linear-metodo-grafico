@@ -1,8 +1,11 @@
 """Módulo para resolver problemas de Programação linear com até 2 variáveis de decisão
 FATEC - MC - Autor: MCSilva - 03/11/2018 - Versão: 0.0.1
 """
+
+
 from app import util
 
+# mapea a combinação de sinais para encontrar a inclinação da reta
 mapa_inclinacao = {'--': 'Decr.', '-+': 'Cresc.',
                    '++': 'Decr.', '+-': 'Cresc.',
                    'FalseTrue': 'Vert.', 'TrueFalse': 'Horiz.'
@@ -10,14 +13,24 @@ mapa_inclinacao = {'--': 'Decr.', '-+': 'Cresc.',
 
 
 class Funcao(object):
-    """Classe Funcao - super classe das classes Restricao e FuncaoObjetivo
+    """Classe Funcao -- super classe
     """
     trono = [0]
     rotulos = ['', '']
     letras = ['x', 'y']
 
     def __init__(self, oper0='+', var1=0., oper1='+', var2=0., oper2='>=', valor=0., letras=['x', 'y'], **kwargs):
-
+        """Método construtor da classe Funcao
+        
+        Keyword Arguments:
+            oper0 {str} -- sinal do valor multiplicador de x (default: {'+'})
+            var1 {float} -- valor do multiplicador de x (default: {0.})
+            oper1 {str} -- sinal do valor multiplicador de y (default: {'+'})
+            var2 {float} -- valor do multiplicador de y (default: {0.})
+            oper2 {str} -- sinal da operação a ser realizada (default: {'>='})
+            valor {float} -- resultado da igualdade ou inequação (default: {0.})
+            letras {list(str)} -- icógnitas utilizadas na função ou inequação (default: {['x', 'y']})
+        """
         self.var1 = var1
         self.var2 = var2
         self.oper0 = oper0
@@ -25,9 +38,12 @@ class Funcao(object):
         self.oper2 = oper2
         self.valor = valor
         self.inclinacao = ''
+
+        # altera o padrão das icógnitas se forem diferentes de x e y
         if letras[0] not in 'xX' and letras[1] not in 'yY':
             self.letras[0], self.letras[1] = letras[0], letras[1]
 
+        # descobre a inclinação da reta da função ou inequação
         if self.var1 == 0 or self.var2 == 0:
             if self.var1 + self.var2 != 0:
                 self.inclinacao = mapa_inclinacao.get(f'{self.var1 == 0}{self.var1 != 0}')
@@ -43,6 +59,8 @@ class Funcao(object):
         return (f'({self.var1}{self.letras[0]} {self.oper1} {self.var2}{self.letras[1]} {self.oper2} {self.valor:.2f})')
 
     def getPontosDaReta(self):
+        """Retorna os pontos da reta conforme sua inclinação
+        """
         pontos_da_reta = []
         if self.var1 != 0:
             ponto = (self.valor / self.var1, 0)
@@ -71,26 +89,35 @@ class Restricao(Funcao):
     """Define a classe para criação de restrições da PL
     """
     def __init__(self, oper0='+', var1=0., oper1='+', var2=0., oper2='>=', valor=0., letras=['x', 'y'], **kwargs):
+        # Efetua a chamada para a super classe Funcao enviando parametros para o construtor da super classe
         super().__init__(oper0, var1, oper1, var2, oper2, valor, letras, **kwargs)
 
 
 class FuncaoObjetivo(Funcao):
-    """Define a classe a criação da função objeto da PL
+    """Define a classe da função objeto da PL
     """
     def __init__(self, oper0='+', var1=0., oper1='+', var2=0., oper2='>=', valor=0., letras=['x', 'y'], **kwargs):
+        # Efetua a chamada para a super classe Funcao enviando parametros para o construtor da super classe
         super().__init__(oper0, var1, oper1, var2, oper2, valor, letras, **kwargs)
+        
+        # Atribui o tipo de problema: maximização ou minimização
         self.objetivo = kwargs.get('objetivo')
 
     def setSolucao(self, solucao):
+        """Adiciona a solução ótima na variável de instância
+        
+        Arguments:
+            solucao {tuple} -- tupla das coordenadas da solução ótima
+        """
         self.solucao = solucao
-        self.valor = calcular(
-            self.oper1, solucao[0] * self.var1, solucao[1] * self.var2)
+        self.valor = calcular(self.oper1, solucao[0] * self.var1, solucao[1] * self.var2)
+
+        # Seta o valor do trono com o maior valor para utilizar na plotagem dos gráfico
         try:
-            pre_trono = (self.valor / self.var1) if (self.valor /
-                                                     self.var1) > (self.valor / self.var2) else (self.valor / self.var2)
+            pre_trono = (self.valor / self.var1) if (self.valor /self.var1) > (self.valor / self.var2) else (self.valor / self.var2)
             self.trono[0] = pre_trono if pre_trono > self.trono[0] else self.trono[0]
         except Exception as ex:
-            print(f'O valor do resultado da função ainda não foi definido\n{ex}')
+            print('CALCULO TRONO->>',f'O valor do resultado da função ainda não foi definido\n{ex}')
 
     def __repr__(self):
         representa = f'{self.var1} x {self.solucao[0]} {self.oper1} {self.var2} x {self.solucao[1]} {self.oper2} {self.valor} ; {self.objetivo} '
@@ -183,6 +210,7 @@ def metodo_cramer(restricoes):
             # print(restricoes[j])
             # print(f'PONTOS->>',x,y)
             pontos.append((x,y))
+            
     # insere a lista de pontos em uma set para retirar as tuplas de coordenadas repetidas
     resultado_cramer = list(set(pontos))
     return resultado_cramer
@@ -198,13 +226,11 @@ def get_coordenadas_validas(lista_coordenadas, restricoes):
     Returns:
         coordenadas_validas {list} -- lista de coordenadas validadas pelas restrições
     """
-
     coordenadas_validas = []
     for x, y in lista_coordenadas:
         count = 0
         for restricao in restricoes:
-            valor = calcular(restricao.oper1, restricao.var1 *
-                             x, restricao.var2 * y)
+            valor = calcular(restricao.oper1, restricao.var1 * x, restricao.var2 * y)
             if not eh_coordenada_valida(restricao.oper2, valor, restricao.valor):
                 count += 1
         if count == 0:
@@ -280,16 +306,37 @@ def encontrar_solucao(funcao, coordenadas_validas):
         solucao_otima {tuple} -- tupla com a coordenada da solução ótima
     """
     valores_solucao = []
-    objetivo = {'max': max, 'min': min}
+    mapa_max_min = {'max': max, 'min': min}
+
+    # Retorna lista 
     if len(coordenadas_validas) == 0:
-        return coordenadas_validas
+        return False
+
+    # Adiciona a lista valores_solução, todos os resultados para as coordenadas da lista de coordenadas válidas
     for x, y in coordenadas_validas:
-        valores_solucao.append([calcular(funcao.oper1, funcao.var1 * x, funcao.var2 * y)])
-    solucao_otima = coordenadas_validas[valores_solucao.index(objetivo.get(funcao.objetivo)(valores_solucao))]
+        valores_solucao.append(
+            [calcular(funcao.oper1, funcao.var1 * x, funcao.var2 * y)]
+        )
+
+    # Atribui para solucao_otima o melhor resultado dos valores obtidos do calculo das coordenadas válidas
+    # coordenadas_validas retorna a tupla do indice obtido pelo metodo index da lista de valores_solucao
+    # obtido pela função mapa_min_max informando a chave funcao.objetivo e passando a lista de valores_solucao
+    # para a função retornada
+    solucao_otima = coordenadas_validas[valores_solucao.index(mapa_max_min.get(funcao.objetivo)(valores_solucao))]
     return solucao_otima
 
 
 def lista_funcoes_obj_com_vertices_validos(funcaoObjetivo, lista_coordenadas, varx, vary):
+    """Função para criar uma lista de resultados da lista de coordenadas válidas
+    
+    Arguments:
+        funcaoObjetivo {FuncaoObjetivo} -- objeto função objetivo
+        lista_coordenadas {list(tuple)} -- lista de tuplas com coordenadas válidas
+        varx {str} -- icógnita utilizada para a variável x
+        vary {str} -- icógnita utilizada para a variável y
+    Returns:
+        lista_funcao_objetivo {list(FuncaoObjetivo)} -- retorna uma lista com resultados de cada coordenada válida
+    """
     lista_funcoes_objetivo = []
     expressao = str(funcaoObjetivo)
     objetivo = funcaoObjetivo.objetivo
@@ -308,36 +355,9 @@ def lista_funcoes_obj_com_vertices_validos(funcaoObjetivo, lista_coordenadas, va
 
 
 def main():
-    # restricoes = []
-    # expressao = ''
-    # try:
-    #     for _ in range(5):
-    #         expressao = input('Entre com as restrições:')
-    #         kwargs = set_expressao(expressao, varx='x', vary='y')
-    #         restricoes.append(Restricao(**kwargs))
-    # except Exception as ex:
-    #     print(ex, f'A expressão->> "{expressao}" está incorreta!')
-
-    # lista_coordenadas = metodo_cramer(restricoes)
-    # # print(lista_coordenadas)
-
-    # coordenadas_validas = get_coordenadas_validas(
-    #     lista_coordenadas[:], restricoes[:])
-    # # print(coordenadas_validas)
-
-    # funcao = input('Insira a função objetivo:')
-    # kwargs = set_expressao(funcao, varx=varx, vary=vary)
-    # funcaoObjetivo = FuncaoObjetivo(objetivo='max', **kwargs)
-    # # print(funcaoObjetivo, funcaoObjetivo.objetivo)
-
-    # solucaoOtima = encontrar_solucao(funcaoObjetivo, coordenadas_validas)
-
-    # funcaoObjetivo.setSolucao(solucaoOtima)
-    # # print('SOLUCAO OTIMA ->>', funcaoObjetivo.__repr__())
     pass
 
 
 if __name__ == '__main__':
     main()
-    # args = 4.0,5
-    # print(calcular('+',*args))
+    

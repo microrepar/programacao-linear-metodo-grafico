@@ -1,3 +1,6 @@
+"""Inicializador do pacote app
+FATEC - MC - Autor: MCSilva - 03/11/2018 - Versão: 0.0.1
+"""
 from flask import Flask, session
 from config import Config
 
