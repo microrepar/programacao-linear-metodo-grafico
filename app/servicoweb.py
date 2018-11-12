@@ -23,6 +23,10 @@ def resolver_metodo_grafico(request):
     varx = request.form['variavelx']
     vary = request.form['variavely']
 
+    if varx == '' or vary == '':
+        return 'Por favor preencha a letra do rótulo'
+    
+
     try:
         # contador para verificar a quantidade de campos preenchidos no formulário
         count = 0
