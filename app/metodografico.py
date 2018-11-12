@@ -2,7 +2,6 @@
 FATEC - MC - Autor: MCSilva - 03/11/2018 - Versão: 0.0.1
 """
 
-
 from app import util
 
 # mapea a combinação de sinais para encontrar a inclinação da reta
