@@ -22,6 +22,11 @@ def resolver_metodo_grafico(request):
     qtde_restricoes = int(request.form['qtde_restricoes']) 
     varx = request.form['variavelx']
     vary = request.form['variavely']
+    # Recupera da requesição a expressão da função objetivo
+    exprFuncao = request.form['funcao_objetivo']
+
+    if exprFuncao == '':
+        return 'Por favor preencha o campo da função objetivo'
 
     if varx == '' or vary == '':
         return 'Por favor preencha a letra do rótulo'
@@ -56,9 +61,6 @@ def resolver_metodo_grafico(request):
 
     # Cria uma lista de coordenadas válidas
     coordenadas_validas = get_coordenadas_validas(lista_coordenadas[:], restricoes[:])
-
-    # Recupera da requesição a expressão da função objetivo
-    exprFuncao = request.form['funcao_objetivo']
 
     # Prepara a keywords arguments para instanciar a função objetivo
     kwargs = set_expressao(exprFuncao, varx, vary)
