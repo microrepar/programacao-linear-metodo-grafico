@@ -1,3 +1,7 @@
+"""Módulo de configuração da aplicação
+FATEC - MC - Autor: MCSilva - 03/11/2018 - Versão: 0.0.1
+"""
+
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))

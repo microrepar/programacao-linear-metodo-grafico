@@ -1,4 +1,4 @@
-"""[summary]
+"""Módulo responsável por servir as requisições web
 FATEC - MC - Autor: MCSilva - 03/11/2018 - Versão: 0.0.1
 """
 

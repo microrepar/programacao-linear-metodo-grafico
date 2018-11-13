@@ -1,4 +1,4 @@
-"""Módulo para resolver problemas de Programação linear com até 2 variáveis de decisão
+"""Módulo para resolver problemas de Programação linear pelo método gráfico com até 2 variáveis de decisão
 FATEC - MC - Autor: MCSilva - 03/11/2018 - Versão: 0.0.1
 """
 

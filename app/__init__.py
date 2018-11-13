@@ -1,4 +1,4 @@
-"""Inicializador do pacote app
+"""Módulo que incializa o pacote app
 FATEC - MC - Autor: MCSilva - 03/11/2018 - Versão: 0.0.1
 """
 from flask import Flask, session
