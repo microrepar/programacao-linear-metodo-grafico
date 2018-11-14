@@ -4,11 +4,21 @@ FATEC - MC - Autor: MCSilva - 03/11/2018 - Versão: 0.0.1
 
 from app import util
 
+def pontos_vertical(valor_x):
+    return [(valor_x, -2e30), (valor_x, 2e30)]
+
+def pontos_horizontal(valor_y):
+    return [(-2e30, valor_y), (2e30, valor_y)]
+
 # mapea a combinação de sinais para encontrar a inclinação da reta
-mapa_inclinacao = {'--': 'Decr.', '-+': 'Cresc.',
-                   '++': 'Decr.', '+-': 'Cresc.',
-                   'FalseTrue': 'Vert.', 'TrueFalse': 'Horiz.'
+mapa_inclinacao = {'--': 'D', '-+': 'C',
+                   '++': 'D', '+-': 'C',
+                   'FalseTrue': 'V', 'TrueFalse': 'H'
                    }
+
+pontos_DC = {'D': [(-2e30, 2e30), (2e30, -2e30)],
+             'C': [(-2e30, 2e30), (2e30, 2e30)]
+             }
 
 
 class Funcao(object):
@@ -36,12 +46,15 @@ class Funcao(object):
         self.oper1 = oper1
         self.oper2 = oper2
         self.valor = valor
-        self.inclinacao = ''
+
+        self.__setInclinaçãoDaReta()
+        self.__pontosAB()
 
         # altera o padrão das icógnitas se forem diferentes de x e y
         if letras[0] not in 'xX' and letras[1] not in 'yY':
             self.letras[0], self.letras[1] = letras[0], letras[1]
 
+    def __setInclinaçãoDaReta(self)    :
         # descobre a inclinação da reta da função ou inequação
         if self.var1 == 0 or self.var2 == 0:
             if self.var1 + self.var2 != 0:
@@ -50,6 +63,16 @@ class Funcao(object):
                 self.inclinacao = None                
         else:
             self.inclinacao = mapa_inclinacao.get(f'{self.oper0 + self.oper1}')
+    
+    def __pontosAB(self):
+        if self.inclinacao != 'V' and self.inclinacao != 'H':
+            self.pontos_ab  = pontos_DC.get(self.inclinacao)
+        elif self.inclinacao == 'V':
+            self.pontos_ab = [(self.var1, -2e30), (self.var1, 2e30)]
+        else:
+            self.pontos_ab = [(-2e30, self.var2), (2e30, self.var2)]
+             
+
 
     def __str__(self):
         return (f'{self.var1}{self.letras[0]} {self.oper1} {self.var2}{self.letras[1]} {self.oper2} {self.valor:.2f}')
@@ -90,6 +113,7 @@ class Restricao(Funcao):
     def __init__(self, oper0='+', var1=0., oper1='+', var2=0., oper2='>=', valor=0., letras=['x', 'y'], **kwargs):
         # Efetua a chamada para a super classe Funcao enviando parametros para o construtor da super classe
         super().__init__(oper0, var1, oper1, var2, oper2, valor, letras, **kwargs)
+
 
 
 class FuncaoObjetivo(Funcao):
@@ -225,6 +249,10 @@ def get_coordenadas_validas(lista_coordenadas, restricoes):
     Returns:
         coordenadas_validas {list} -- lista de coordenadas validadas pelas restrições
     """
+    for restricao in restricoes:
+        # adiciona os pontos AB respectivo a inclinação de cada restrição
+        lista_coordenadas += restricao.pontos_ab
+
     coordenadas_validas = []
     for x, y in lista_coordenadas:
         count = 0
@@ -308,20 +336,33 @@ def encontrar_solucao(funcao, coordenadas_validas):
     mapa_max_min = {'max': max, 'min': min}
 
     # Retorna lista 
-    if len(coordenadas_validas) == 0:
+    if len(coordenadas_validas) < 2:
         return False
-
+    
     # Adiciona a lista valores_solução, todos os resultados para as coordenadas da lista de coordenadas válidas
     for x, y in coordenadas_validas:
         valores_solucao.append(
             [calcular(funcao.oper1, funcao.var1 * x, funcao.var2 * y)]
         )
 
+    valor_maximo = mapa_max_min.get('max')(valores_solucao)
+    valor_minimo = mapa_max_min.get('min')(valores_solucao)
+
+    solucao_maxima = coordenadas_validas[valores_solucao.index(valor_maximo)]
+    solucao_minima = coordenadas_validas[valores_solucao.index(valor_minimo)]
+
+    if 2e+30 in solucao_maxima:
+        return False
+    if -2e+30 in solucao_minima:
+        return False
+
     # Atribui para solucao_otima o melhor resultado dos valores obtidos do calculo das coordenadas válidas
+    melhor_valor = mapa_max_min.get(funcao.objetivo)(valores_solucao)
+
     # coordenadas_validas retorna a tupla do indice obtido pelo metodo index da lista de valores_solucao
-    # obtido pela função mapa_min_max informando a chave funcao.objetivo e passando a lista de valores_solucao
-    # para a função retornada
-    solucao_otima = coordenadas_validas[valores_solucao.index(mapa_max_min.get(funcao.objetivo)(valores_solucao))]
+    # obtido pela função mapa_min_max por meio do melhor_valor obtido para a função retornada
+    solucao_otima = coordenadas_validas[valores_solucao.index(melhor_valor)]
+
     return solucao_otima
 
 

@@ -22,14 +22,14 @@ def resolver_metodo_grafico(request):
     qtde_restricoes = int(request.form['qtde_restricoes']) 
     varx = request.form['variavelx']
     vary = request.form['variavely']
-    # Recupera da requesição a expressão da função objetivo
+    # Recupera a expressão da função objetivo
     exprFuncao = request.form['funcao_objetivo']
 
     if exprFuncao == '':
         return 'Por favor preencha o campo da função objetivo'
 
     if varx == '' or vary == '':
-        return 'Por favor preencha a letra do rótulo'
+        return 'Por favor preencha as letras que representam as variáveis dos rótulos'
     
 
     try:
@@ -43,7 +43,7 @@ def resolver_metodo_grafico(request):
                 restricoes.append(Restricao(**kwargs))
                 count += 1
 
-        # verifica a quantidade de campos das restrições preenchidas
+        # verifica a quantidade de campos das restrições preenchidas, se menor que 2 retorna mensagem de erro
         if count < 2:
             return 'O problema não converge!'
 

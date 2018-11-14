@@ -35,6 +35,7 @@ def form_calculadora(qtde_restricoes):
     
     Arguments:
         qtde_restricoes {int} -- recebe o numero inteiro referente a quantidade de restrições do formulário
+        
     Returns:
         formCalculadora.html -- se a requisição do tipo POST e quantidade válida de restrições
         index.html -- se ocorrer alguma excessão no bloco try-except com flash notificação
