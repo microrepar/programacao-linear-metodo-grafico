@@ -53,7 +53,7 @@ class Funcao(object):
         # altera o padrão das icógnitas se forem letras iguais
         if letras[0].upper() ==  letras[1].upper():
             self.letras[0], self.letras[1] = 'x', 'y'
-        elif not self.letras[0] and not self.letras[1]:
+        else:
             self.letras[0], self.letras[1] = letras[0], letras[1]
 
 
