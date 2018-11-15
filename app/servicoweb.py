@@ -40,6 +40,8 @@ def resolver_metodo_grafico(request):
             expressao = request.form[f'restricao{i + 1}']
             if expressao != '':
                 kwargs = set_expressao(expressao, varx, vary)
+                if type(kwargs) is type(''):
+                    return kwargs
                 restricoes.append(Restricao(**kwargs))
                 count += 1
 

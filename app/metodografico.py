@@ -165,10 +165,15 @@ def set_expressao(expressao, varx, vary):
     """
     # insere uma expressão nula para os campos do formulários que não forem preenchidos
     if expressao == '':
-        expressao = '0x+0y=0'
-        
-    expressao = util.prepara_string_to_map(expressao, varx, vary)
+        expressao = f'0{varx}+0{vary}=0'
 
+    # normaliza a string de entrada para ser mapeada -- entrada: '0x+0y=0' -- retorno: '+ 0x + 0y = 0'
+    expressao = util.prepara_string_to_map(expressao, varx, vary)
+    
+    # 
+    if 'Atenção' in expressao:
+        return expressao
+        
     # cria uma lista de tuplas do tipo chave, valor
     args = [(x, i) for x, i in zip('oper0 var1 oper1 var2 oper2 valor'.split(), expressao.split())]
     

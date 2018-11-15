@@ -31,6 +31,18 @@ def prepara_string_to_map(expressao, varx='x', vary='y'):
         processada = processada.replace(i, f' {i} ')
 
     termos = processada.split()
+    print('TERMOS->>',termos)
+
+    if len(termos) == 6:
+        if varx not in termos[1]:
+            return f'Atenção! A letra da 1º icógnita não corresponte com a variável da expressão informada: "{expressao}".'
+        elif vary not in termos[3]:
+            return f'Atenção! A letra da 2º icógnita não corresponte com a variável da expressão informada: "{expressao}".'
+    if len(termos) == 4:
+        if varx not in termos[1] and vary not in termos[1]:
+            return f'Atenção! A letra da expressão informada: "{expressao}", não corresponde com nenhuma das variáveis.'
+        
+
 
     for i, termo in enumerate(tuple(termos)):
         if varx in termo:
