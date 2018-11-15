@@ -150,8 +150,8 @@ class FuncaoObjetivo(Funcao):
         return representa
 
 
-def set_expressao(expressao, varx, vary):
-    """Prepara a string contendo a expressão matematica para instância de um do tipo da Classe Funcao
+def expressao_to_dict(expressao, varx, vary):
+    """Passa a string contendo a expressão matematica para uma keywords arguments
 
     Arguments:
         expressao {str} -- string com a formula das funções objetivo e restrições
@@ -390,7 +390,7 @@ def lista_funcoes_obj_com_vertices_validos(funcaoObjetivo, lista_coordenadas, va
     objetivo = funcaoObjetivo.objetivo
 
     for vertice in lista_coordenadas:
-        kwargs = set_expressao(expressao, varx, vary)
+        kwargs = expressao_to_dict(expressao, varx, vary)
         kwargs.setdefault('objetivo', objetivo)
 
         fObjetivo = FuncaoObjetivo(**kwargs)

@@ -14,11 +14,16 @@ def resolver_metodo_grafico(request):
     Returns:
         resultado {dict} -- dicionário com a seguinte listas: ['restricoes', 'lista_completa_pares_ordenados', 'pares_ord_validos', 'lista_func_vertices_validos', 'funcao_objetivo']
     """
+    # Lista para conter os objestos do tipo Restricao
     restricoes = []
+
+    # Variável para armazenar a expressões enviadas na requisição
     expressao = ''
+
+    # Dicionário contendo as listas de objetos para renderizar na pagina resultado.html
     resultado = dict()
 
-    # Atribuição dos valores da contidos na requisição para as variáveis locais
+    # Atribuição dos valores contidos na requisição para as variáveis locais
     qtde_restricoes = int(request.form['qtde_restricoes']) 
     varx = request.form['variavelx']
     vary = request.form['variavely']
@@ -31,21 +36,24 @@ def resolver_metodo_grafico(request):
     if varx == '' or vary == '':
         return 'Por favor preencha as letras que representam as variáveis dos rótulos'
     
-
     try:
         # contador para verificar a quantidade de campos preenchidos no formulário
         count = 0
         
         for i in range(qtde_restricoes):
+            # Recupera a restrição do objeto request que foi preenchido no formulário
             expressao = request.form[f'restricao{i + 1}']
             
-            if expressao != '':
-                kwargs = set_expressao(expressao, varx, vary)
+            # verifica se a expressão esta preenchida
+            if expressao.strip() != '':
+
+                kwargs = expressao_to_dict(expressao, varx, vary)
 
                 # Verifica se o tipo na variável kwargs é uma string e finaliza a função retornando-a
                 if type(kwargs) is type(''):
                     return kwargs
 
+                # Adiciona a restrição na lista de restrições
                 restricoes.append(Restricao(**kwargs))
                 count += 1
 
@@ -55,8 +63,8 @@ def resolver_metodo_grafico(request):
 
         # Adiciona as restrições de positividade para o input-chekbox ativo
         if request.form.get('restricao_positiva', None) == 'ativo':
-            restricoes.append(Restricao(**set_expressao(f'{varx}>=0', varx, vary)))
-            restricoes.append(Restricao(**set_expressao(f'{vary}>=0', varx, vary)))
+            restricoes.append(Restricao(**expressao_to_dict(f'{varx}>=0', varx, vary)))
+            restricoes.append(Restricao(**expressao_to_dict(f'{vary}>=0', varx, vary)))
 
     except Exception as ex:
         print(ex, f'A expressão->> "{expressao}" está incorreta!')
@@ -65,26 +73,30 @@ def resolver_metodo_grafico(request):
     # Chama a função metodo_cramer e obtém uma lista de coordenadas não repetidas
     lista_coordenadas = metodo_cramer(restricoes)
 
-    # Cria uma lista de coordenadas válidas
+    # Cria uma lista de coordenadas válidas eviando como argumento uma cópia rasa da lista de coordenadas e da lista de restricoes
     coordenadas_validas = get_coordenadas_validas(lista_coordenadas[:], restricoes[:])
 
-    # Prepara a keywords arguments para instanciar a função objetivo
-    kwargs = set_expressao(exprFuncao, varx, vary)
+    # Prepara uma keywords arguments para instanciar a função objetivo passando a expressão da função objetivo
+    kwargs = expressao_to_dict(exprFuncao, varx, vary)
 
     # Verifica se o tipo na variável kwargs é uma string e finaliza a função retornando-a
+    # Se for um dicionário continua
     if type(kwargs) is type(''):
         return kwargs
 
+    # Insere qual o tipo de problema a ser resolvido, se de maximização ou minimização 
     kwargs.setdefault('objetivo', request.form['objetivo'])
 
-    # Cria uma estância da classe FuncaoObjetivo
+    # Cria uma estância da classe FuncaoObjetivo passando a keywords arguments
     funcaoObjetivo = FuncaoObjetivo(**kwargs)
 
     # Adiciona o rótulo da variável x
-    funcaoObjetivo.setRotuloVar1(request.form['rotulo_var1'])
-
+    rotulo_var1 = request.form['rotulo_var1']
+    funcaoObjetivo.setRotuloVar1(rotulo_var1)
+    
     # Adiciona o rótulo da variável y
-    funcaoObjetivo.setRotuloVar2(request.form['rotulo_var2'])
+    rotulo_var2 = request.form['rotulo_var2']
+    funcaoObjetivo.setRotuloVar2(rotulo_var2)
 
     # Obtém a solução ótima da lista de coordenadas válidas
     solucaoOtima = encontrar_solucao(funcaoObjetivo, coordenadas_validas)
@@ -99,7 +111,7 @@ def resolver_metodo_grafico(request):
     # Obtém uma lista de funções objetivo com base na lista de coordenadas válidas
     listaFuncoesComVerticesValidos = lista_funcoes_obj_com_vertices_validos(funcaoObjetivo, coordenadas_validas, varx, vary)
 
-    # Adiciona as listas obtidas no dicionário resultados para ser renderizado no template de resposta
+    # Adiciona as listas obtidas no dicionário resultado para ser renderizado no template de resposta
     resultado.setdefault('restricoes', restricoes)
     resultado.setdefault('lista_completa_pares_ordenados', lista_coordenadas)
     resultado.setdefault('pares_ord_validos', coordenadas_validas)
@@ -107,4 +119,3 @@ def resolver_metodo_grafico(request):
     resultado.setdefault('funcao_objetivo', funcaoObjetivo)    
 
     return resultado
-
