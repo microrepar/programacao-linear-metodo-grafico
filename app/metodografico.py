@@ -26,7 +26,7 @@ class Funcao(object):
     """
     trono = [0]
     rotulos = ['', '']
-    letras = ['x', 'y']
+    letras = [None, None]
 
     def __init__(self, oper0='+', var1=0., oper1='+', var2=0., oper2='>=', valor=0., letras=['x', 'y'], **kwargs):
         """Método construtor da classe Funcao
@@ -50,9 +50,12 @@ class Funcao(object):
         self.__setInclinaçãoDaReta()
         self.__pontosAB()
 
-        # altera o padrão das icógnitas se forem diferentes de x e y
-        if letras[0] not in 'xX' and letras[1] not in 'yY':
+        # altera o padrão das icógnitas se forem letras iguais
+        if letras[0].upper() ==  letras[1].upper():
+            self.letras[0], self.letras[1] = 'x', 'y'
+        elif not self.letras[0] and not self.letras[1]:
             self.letras[0], self.letras[1] = letras[0], letras[1]
+
 
     def __setInclinaçãoDaReta(self)    :
         # descobre a inclinação da reta da função ou inequação

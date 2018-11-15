@@ -15,10 +15,10 @@
                 <thead class="thead-inverse thead-dark ">
                     <tr>
                         <th>FUNÇÃO OBJETIVO</th>
-                        <th>{{ fObj.rotulos[0].upper() }} ({{ fObj.letras[0] }})</th>
-                        <th>{{ fObj.rotulos[1].upper() }} ({{ fObj.letras[1] }})</th>
-                        <th>TOTAL</th>
-                        <th>
+                        <th class="text-center">{{ fObj.rotulos[0].upper() }} ({{ fObj.letras[0] }})</th>
+                        <th class="text-center">{{ fObj.rotulos[1].upper() }} ({{ fObj.letras[1] }})</th>
+                        <th class="text-center">TOTAL</th>
+                        <th class="text-center">
                             {% if fObj.objetivo == 'max' %}
                             MAXIMIZAÇÃO
                             {% else %}
@@ -34,7 +34,7 @@
                         <th scope="row ">{{ funcao|e }}</th>
                         <td class="text-center">{{ "%.2f"|format(funcao.solucao[0]) }}</td>
                         <td class="text-center">{{ "%.2f"|format(funcao.solucao[1]) }}</td>
-                        <td>{{ "%.2f"|format(funcao.valor) }}</td>
+                        <td class="text-center">{{ "%.2f"|format(funcao.valor) }}</td>
                         <td {% if funcao.solucao==fObj.solucao %} class="bg-success text-center text-white">TRUE
                             {% else %}
                             class="bg-danger text-center text-white">FALSE
