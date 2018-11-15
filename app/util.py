@@ -15,6 +15,10 @@ def prepara_string_to_map(expressao, varx='x', vary='y'):
     Returns:
         normalizado {str} -- expressão normalizada pronta para o mapeamento em uma keyword args (kwargs)
     """
+    # Verifica se as letras de varx e vary são iguais
+    if varx.upper() == vary.upper():
+        return f'Atenção! As letras da 1º e 2º variável dos rótulos devem ser diferentes.'
+
     # Inicia a lista que conterá o resultado após processamento da string
     resultado = list()
 
@@ -46,9 +50,9 @@ def prepara_string_to_map(expressao, varx='x', vary='y'):
     # se as letras não corresponderem, retorna a mensagem de Atenção!
     if len(termos) == 6:
         if varx not in termos[1]:
-            return f'Atenção! A letra "{varx}" do 1º rótulo não corresponde com a letra da variável da expressão informada: "{expressao}".'
+            return f'Atenção! A letra da 1º variável da expressão informada: "{expressao}", não corresponde com a letra "{varx}" do 1º rótulo.'
         elif vary not in termos[3]:
-            return f'Atenção! A letra "{vary}" do 2º rótulo não corresponde com a letra da variável da expressão informada: "{expressao}".'
+            return f'Atenção! A letra da 2º variável da expressão informada: "{expressao}", não corresponde com a letra "{vary}" do 2º rótulo.'
     if len(termos) == 4:
         if varx not in termos[1] and vary not in termos[1]:
             return f'Atenção! A letra da expressão informada: "{expressao}", não corresponde com nenhuma das variáveis.'
