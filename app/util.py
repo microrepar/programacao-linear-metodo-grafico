@@ -15,35 +15,45 @@ def prepara_string_to_map(expressao, varx='x', vary='y'):
     Returns:
         normalizado {str} -- expressão normalizada pronta para o mapeamento em uma keyword args (kwargs)
     """
+    # Inicia a lista que conterá o resultado após processamento da string
     resultado = list()
+
+    # Atribui a string enviada por parâmetro para ser processada
     processada = expressao
 
+    # Tira todos os espaços da string
     processada = processada.replace(' ', '')
 
+    # Adiciona o sinal de '+' se no início da string se não conter nenhum sinal
     if processada[0] not in '-+':
         processada = f'+{processada}'
 
+    # Efetua loop com cada sinal '= < >', para inserção de espaços na string
     for i in '= < >':
+        # verifica se não há do operadores <= ou >= para efetuar a inserção dos espaços entre os operadores
         if '<=' not in processada and '>=' not in processada:
             processada = processada.replace(i, f' {i} ')
 
-    for i in '+ - <= >='.split():
+
+    # Efetua loop com cada sinal da lista ['+', '-', '<=', '>='], para inserção de espaços na string
+    for i in '+ - <= >='.split():       # O método .split() retorna uma lista da string separada pelos espaços.
         processada = processada.replace(i, f' {i} ')
 
+    # Cria uma lista de termos a partir da string, onde cada termo é parte da string separada por espaço
     termos = processada.split()
-    print('TERMOS->>',termos)
 
+    # Efetua a verificação da correspondência entre as letras das restrições e as letras dos rótulos
+    # se as letras não corresponderem, retorna a mensagem de Atenção!
     if len(termos) == 6:
         if varx not in termos[1]:
-            return f'Atenção! A letra da 1º icógnita não corresponte com a variável da expressão informada: "{expressao}".'
+            return f'Atenção! A letra "{varx}" do 1º rótulo não corresponde com a letra da variável da expressão informada: "{expressao}".'
         elif vary not in termos[3]:
-            return f'Atenção! A letra da 2º icógnita não corresponte com a variável da expressão informada: "{expressao}".'
+            return f'Atenção! A letra "{vary}" do 2º rótulo não corresponde com a letra da variável da expressão informada: "{expressao}".'
     if len(termos) == 4:
         if varx not in termos[1] and vary not in termos[1]:
             return f'Atenção! A letra da expressão informada: "{expressao}", não corresponde com nenhuma das variáveis.'
         
-
-
+    # Inseri o numero 1 quando o termo da variavel não contiver numeros e adiciona todos os termos na lista resultado
     for i, termo in enumerate(tuple(termos)):
         if varx in termo:
             temp = f'1{termo}' if termo[0] not in '0123456789' else termo
@@ -54,6 +64,7 @@ def prepara_string_to_map(expressao, varx='x', vary='y'):
         else:
             resultado.append(termo)
 
+    # Inseri o sinal '+' e o valor '0' na posição correspondente da variável que não existir na expressão
     if len(resultado) == 4 and varx not in ''.join(resultado):
         resultado.insert(0, '+')
         resultado.insert(1, '0x')
@@ -63,7 +74,11 @@ def prepara_string_to_map(expressao, varx='x', vary='y'):
 
     if resultado[-1][-1] not in '0123456789':
         resultado[-1] = f'{0.0}'
+
+    # Transforma a lista resultado em uma string juntando cada item da lista com um espaço entre eles
     normalizado = ' '.join(resultado)
+    
+    # retorna uma a expressão normalizada
     return normalizado
 
 

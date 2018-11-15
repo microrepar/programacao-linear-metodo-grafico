@@ -170,7 +170,7 @@ def set_expressao(expressao, varx, vary):
     # normaliza a string de entrada para ser mapeada -- entrada: '0x+0y=0' -- retorno: '+ 0x + 0y = 0'
     expressao = util.prepara_string_to_map(expressao, varx, vary)
     
-    # 
+    # Se a expressão contiver a palavra 'Atenção', finaliza a função retornado a variavel expressão com a mensagem
     if 'Atenção' in expressao:
         return expressao
         

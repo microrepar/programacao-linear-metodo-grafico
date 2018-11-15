@@ -48,9 +48,13 @@ def form_calculadora(qtde_restricoes):
         if request.form['acao'] == 'resolver':
             try:
                 resultado = servicoweb.resolver_metodo_grafico(request)
+
+                # Se o tipo do resultado for uma string adiciona uma flash de respota com o resultado
+                # e redireciona para a propria pagina do formulario
                 if type(resultado) is type(''):
                     flash(resultado)
                     return redirect(url_for('form_calculadora', qtde_restricoes=qtde_restricoes))
+                    
                 chart = plotter.gerar_graficoXY(resultado)
                 chart1 = plotter.gerar_grafico_line(resultado)
                 return render_template('resultado.html', resultado=resultado, chart=chart, chart1=chart1)
