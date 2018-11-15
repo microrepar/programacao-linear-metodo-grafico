@@ -70,6 +70,11 @@ def resolver_metodo_grafico(request):
 
     # Prepara a keywords arguments para instanciar a função objetivo
     kwargs = set_expressao(exprFuncao, varx, vary)
+
+    # Verifica se o tipo na variável kwargs é uma string e finaliza a função retornando-a
+    if type(kwargs) is type(''):
+        return kwargs
+
     kwargs.setdefault('objetivo', request.form['objetivo'])
 
     # Cria uma estância da classe FuncaoObjetivo
