@@ -17,7 +17,7 @@ def prepara_string_to_map(expressao, varx='x', vary='y'):
     """
     # Verifica se as letras de varx e vary são iguais
     if varx.upper() == vary.upper():
-        return f'Atenção! As letras da 1º e 2º variável dos rótulos devem ser diferentes.'
+        return f'Atenção! As letras da 1º e 2º variável dos rótulos, devem ser diferentes.'
 
     # Inicia a lista que conterá o resultado após processamento da string
     resultado = list()
