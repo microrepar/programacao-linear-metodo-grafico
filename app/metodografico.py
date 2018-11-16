@@ -140,6 +140,7 @@ class FuncaoObjetivo(Funcao):
 
         # Seta o valor do trono com o maior valor para utilizar na plotagem dos gráfico
         try:
+            pre_trono = 0
             pre_trono = (self.valor / self.var1) if (self.valor /self.var1) > (self.valor / self.var2) else (self.valor / self.var2)
             self.trono[0] = pre_trono if pre_trono > self.trono[0] else self.trono[0]
         except Exception as ex:
