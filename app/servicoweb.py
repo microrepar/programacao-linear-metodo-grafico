@@ -108,6 +108,9 @@ def resolver_metodo_grafico(request):
     # Adiciona a tupla da solução ótima na função objetivo
     funcaoObjetivo.setSolucao(solucaoOtima)
 
+    # Adiciona a lista de coordenadas validas para utilizar o maior valor para a plotagem do gráfico
+    funcaoObjetivo.setTrono(coordenadas_validas)
+
     # Obtém uma lista de funções objetivo com base na lista de coordenadas válidas
     listaFuncoesComVerticesValidos = lista_funcoes_obj_com_vertices_validos(funcaoObjetivo, coordenadas_validas, varx, vary)
 

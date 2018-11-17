@@ -87,19 +87,64 @@ class Funcao(object):
         """Retorna os pontos da reta conforme sua inclinação
         """
         pontos_da_reta = []
-        if self.var1 != 0:
-            ponto = (self.valor / self.var1, 0)
-            pontos_da_reta.append(ponto)
-        else:
-            ponto = (self.trono[0], self.valor / self.var2)
-            pontos_da_reta.append(ponto)
 
-        if self.var2 != 0:
-            ponto = (0, self.valor / self.var2)
-            pontos_da_reta.append(ponto)
-        else:
-            ponto = (self.valor / self.var1, self.trono[0])
-            pontos_da_reta.append(ponto)
+        # if self.inclinacao == 'V':
+        #     ponto = (self.valor / self.var1, self.trono[0])
+        #     pontos_da_reta.append(ponto)
+        #     ponto = (self.valor / self.var1, 0)
+        #     pontos_da_reta.append(ponto)
+
+        # elif self.inclinacao == 'H':
+        #     ponto = (self.trono[0], self.valor / self.var2)
+        #     pontos_da_reta.append(ponto)
+        #     ponto = (0, self.valor / self.var2)
+        #     pontos_da_reta.append(ponto)
+
+        # elif self.inclinacao == 'D':
+        #     ponto = (self.valor / self.var1, 0)
+        #     pontos_da_reta.append(ponto)
+        #     ponto = (0, self.valor / self.var2)
+        #     pontos_da_reta.append(ponto)
+
+        # elif self.inclinacao == 'C':
+        #     if self.var1 <= 0:
+        #         ponto = (0, self.valor / self.var2)
+        #         pontos_da_reta.append(ponto)
+        #         ponto = (self.trono[0], (self.trono + self.valor) / self.var2 )
+        #         pontos_da_reta.append(ponto)
+        #     else:
+        #         ponto = (self.valor / self.var2, 0)
+        #         pontos_da_reta.append(ponto)
+        #         ponto = ((self.trono + self.valor) / self.var1, self.trono[0])
+        #         pontos_da_reta.append(ponto)
+
+        if self.inclinacao == 'C':
+            if self.var1 < 0:
+                ponto = (0, self.valor / self.var2)
+                pontos_da_reta.append(ponto)
+                passa_lado_direito = (self.trono[0] * self.var1) * -1
+                soma_direto_mais_valor = passa_lado_direito + self.valor    
+                ponto = (self.trono[0], soma_direto_mais_valor / self.var2 )
+                pontos_da_reta.append(ponto)
+            else:
+                ponto = (self.valor / self.var2, 0)
+                pontos_da_reta.append(ponto)
+                ponto = ((self.trono[0] + self.valor) / self.var1, self.trono[0])
+                pontos_da_reta.append(ponto)
+        else:        
+            if self.var1 != 0:
+                ponto = (self.valor / self.var1, 0)
+                pontos_da_reta.append(ponto)
+            else:
+                ponto = (self.trono[0], self.valor / self.var2)
+                pontos_da_reta.append(ponto)
+
+            if self.var2 != 0:
+                ponto = (0, self.valor / self.var2)
+                pontos_da_reta.append(ponto)
+            else:
+                ponto = (self.valor / self.var1, self.trono[0])
+                pontos_da_reta.append(ponto)
 
         return pontos_da_reta
 
@@ -138,13 +183,20 @@ class FuncaoObjetivo(Funcao):
         self.solucao = solucao
         self.valor = calcular(self.oper1, solucao[0] * self.var1, solucao[1] * self.var2)
 
-        # Seta o valor do trono com o maior valor para utilizar na plotagem dos gráfico
-        try:
-            pre_trono = 0
-            pre_trono = (self.valor / self.var1) if (self.valor /self.var1) > (self.valor / self.var2) else (self.valor / self.var2)
-            self.trono[0] = pre_trono if pre_trono > self.trono[0] else self.trono[0]
-        except Exception as ex:
-            print('CALCULO TRONO->>',f'O valor do resultado da função ainda não foi definido\n{ex}')
+        # # Seta o valor do trono com o maior valor para utilizar na plotagem dos gráfico
+        # try:
+        #     pre_trono = 0
+        #     pre_trono = (self.valor / self.var1) if (self.valor /self.var1) > (self.valor / self.var2) else (self.valor / self.var2)
+        #     self.trono[0] = pre_trono if pre_trono > self.trono[0] else self.trono[0]
+        # except Exception as ex:
+        #     print('CALCULO TRONO->>',f'O valor do resultado da função ainda não foi definido\n{ex}')
+    
+    def setTrono(self, lista_pontos_validos):
+        lista_numeros = list()
+        for x, y in lista_pontos_validos:
+            lista_numeros.append(x)
+            lista_numeros.append(y)
+        self.trono[0] = max(lista_numeros)
 
     def __repr__(self):
         representa = f'{self.var1} x {self.solucao[0]} {self.oper1} {self.var2} x {self.solucao[1]} {self.oper2} {self.valor} ; {self.objetivo} '
